@@ -1,0 +1,10 @@
+//package(".")::file.len should < 5;
+//class(implementation "GAPDetector.json.inputDTO.SAP")::name should endsWith "Connection";
+//class(implementation "GAPDetector.json.inputDTO.SAP")only accessed(["GAPDetector.utils.commands.FilteredByCoreFileList"]);
+//class(implementation "Connection.class")::name should endsWith "Connection";
+//class(implementation "checkParamHelp")::name should endsWith "Parser";
+//class("GAPDetector.utils..") only accessed(["GAPDetector.utils.commands.FilteredByCoreFileList"]);
+//class(implementation "Connection")::name should endsWith "Connection";
+//class(implementation "Connection.class") should extend (["..myapp..")]);
+//class（implementation "Connection.class") should not extend [implementation "Connection.class"]
+class(activelynative "EntityManager.class") should not extend class( extensive "..");

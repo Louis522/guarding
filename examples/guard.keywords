@@ -1,0 +1,58 @@
+onion:
+    domainModel:
+    domainService:
+    applicationService:
+    adapter:
+
+clean:
+
+layer:
+   name
+
+rules:
+    "Presentation" accessedBy
+
+module:
+    resideIn
+    access:
+        only
+
+package:
+    dependOn
+
+class:
+    implement
+    annotation
+    annotatedWith
+
+    dependent -> resideIn
+
+    public
+
+checks
+    cycle
+
+not accessedBy
+    definedBy
+    dependOn
+    dependBy
+
+expression:
+    and
+    or
+    not
+    equals
+    only
+
+    contains
+    endingWith
+    startingWith
+
+file:
+    ending
+    start
+    contains
+    matching (regex)
+
+ignore:
+    ""

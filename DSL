@@ -1,0 +1,66 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1.
+rule_level ~ ("(" ~ scope ~ ")")? ~ (use_symbol ~ expression)? ~ should? ~ only? ~ operator ~ assert ~ ";"?
+
+2.
+rule_level ~ ("(" ~ scope ~ ")")? ~ (use_symbol ~ expression)? ~ should? ~ only? ~ operator ~ assert ~ ";"?
+array_stringed = {
+    "(" ~ "[" ~ scope? ~ string ~ ("," ~ string)* ~ "]" ~ ")"
+}
+
+stringed = {
+    "("? ~ scope? ~ string ~ ")"?
+}
+
+leveled = {
+    rule_level ~ "(" ~ scope?~ string ~ ")"
+}
+
+class(activelynative "EntityManager.class") extend class(extensive "..persistence.");
+
+3.
+
+* 多個scope組合 括號組合  class(extensive public (impl "test"))
+* path/packageName
+
+class(activelyNative public (packageNAme "packageA")) should only dependOn class(activelyNative public)
+
+
+
+
+
+guardrule{
+ rulelevel{...}; class
+ rulescope{...}; activelyNative ("packageA")
+ opeartor ...;   extend
+ assert{...};    class(extensive public "packageB")
+
+
+}
+classes = importPackage("EntityManager...")
+classes().that().areActivelyNative().should().onlyBeExtendedByClassesThat().areDefinedInPackage("...")
+
+level().that().scope1().and().scope2()....scopeN().should().cond1().and().cond2()...()
+
+class().that().activelyNative().deinfedIn(“packageA").should().beExtendedByClassesThat().definedIn("packageB")
+
+
+rule_level ~ ("(" ~ scope ~ ")")? ~ (use_symbol ~ expression)? ~ should? ~ only? ~ operator ~ assert ~ ";"?
+
+class(activelynative "EntityManager.class") extend class(extensive "..persistence.");
+                                                   class(public)
+                                                class(extensive public (impl "test"))

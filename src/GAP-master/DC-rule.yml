@@ -1,0 +1,5 @@
+detectTarget: # metric
+  threshold:
+    target: DC
+    min_SAME_PARS: 3
+    min_SAME_PARS_FUNC: 4

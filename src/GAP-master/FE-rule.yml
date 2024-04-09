@@ -1,0 +1,6 @@
+detectTarget: # metric
+  threshold:
+    target: FE
+    atfd: 3
+    laa: 0.33
+    fdp: 3
