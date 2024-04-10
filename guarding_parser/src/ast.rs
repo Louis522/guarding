@@ -4,6 +4,7 @@ use std::collections::HashMap;
 pub struct GuardRule {
     pub origin: String,
     pub ty: RuleType,
+    pub attr:Vec<Attribute>,
     pub level: RuleLevel,
     pub scope: RuleScope,
     pub expr: Expr,
@@ -33,6 +34,7 @@ impl Default for GuardRule {
         GuardRule {
             origin: "".to_string(),
             ty: RuleType::Normal,
+            attr:vec![],
             level: RuleLevel::Class,
             scope: RuleScope::All,
             expr: Expr::Identifier("".to_string()),
@@ -105,7 +107,8 @@ pub enum RuleScope {
     Implementation(String),
     MatchRegex(String),
     ActivelyNative(String),
-    Extensive(String)
+    Extensive(String),
+    PackageName(String),
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -140,6 +143,15 @@ impl Default for FunctionCall {
         }
     }
 }
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum Attribute {
+    Public,
+    Private,
+    Protected,
+    Static,
+    Final,
+    Abstract,
+}
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Operator {
@@ -171,9 +183,10 @@ pub enum Operator {
     // package operators
     Inside,
     ResideIn,
-    Accessed,
+    AccessBy,
     DependBy,
     Extend,
+    ExtendBy,
     Implement,
     FreeOfCircle
 }

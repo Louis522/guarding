@@ -154,7 +154,7 @@ impl RuleExecutor {
 
         let operator = &rule.ops[0];
         match operator {
-            Operator::Accessed => {
+            Operator::AccessBy => {
                 match &rule.assert {
                     RuleAssert::Stringed(scp,pkg_identifier) => {
                         assert_models = self.filter_classes_by_package_identifier(pkg_identifier);
@@ -189,7 +189,7 @@ impl RuleExecutor {
         let mut assert_success = true;
 
         match operator {
-            Operator::Accessed => {
+            Operator::AccessBy => {
                 let paths = self.search_by_access(pkg_identifier);
                 if paths.len() > 0 {
                     assert_success = false;

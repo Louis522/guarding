@@ -2,7 +2,7 @@ use pest::iterators::{Pair, Pairs};
 use pest::Parser;
 
 use crate::errors::{Error, Result as GuardingResult};
-use crate::ast::{Expr, GuardRule, Operator, RuleAssert, RuleLevel, RuleScope};
+use crate::ast::{Expr, GuardRule, Operator,Attribute, RuleAssert, RuleLevel, RuleScope};
 use crate::parser::Rule::scope;
 use crate::support::str_support;
 
@@ -69,6 +69,9 @@ fn parse_normal_rule(pair: Pair<Rule>) -> GuardRule {
             Rule::rule_level => {
                 guard_rule.level = parse_rule_level(p);
             }
+            Rule::attribute => {
+                guard_rule.attr = parse_attr(p);
+            }
             Rule::use_symbol => {
                 // may be can do something, but still nothing.
             }
@@ -109,10 +112,33 @@ fn parse_rule_level(pair: Pair<Rule>) -> RuleLevel {
         &_ => { unreachable!("error rule level: {:?}", level_str) }
     }
 }
+fn parse_attr(parent: Pair<Rule>) -> Vec<Attribute> {
+    let mut pairs = parent.into_inner();
+    //let mut pair = pairs.next().unwrap();
+    //Todo add SomeThing
+    let mut attributes: Vec<Attribute> = vec![];
+    for pair in pairs {
+       // pair = p.into_inner().next().unwrap();
+        let attribute = match pair.as_str() {
+        "public" => { Attribute::Public }
+        "private" => { Attribute::Private }
+        "protected" => { Attribute::Protected }
+        "static" => { Attribute::Static }
+        "final" => { Attribute::Final }
+        "abstract" => { Attribute::Abstract }
+        _ => {
+            panic!("implementing ops: {:?}, text: {:?}", pair.as_rule(), pair.as_span())
+        }
+    };
+        attributes.push(attribute)
+    }
+    attributes
+}
+
 
 fn parse_operator(parent: Pair<Rule>) -> Vec<Operator> {
-    let mut pairs = parent.into_inner();
-    let mut pair = pairs.next().unwrap();
+    let mut pairs = parent.into_inner(); //父级元素转换成子级元素
+    let mut pair = pairs.next().unwrap(); //获取第一个子级元素,unwrap()强制获取
     let mut operators: Vec<Operator> = vec![];
 
     match pair.as_rule() {
@@ -138,9 +164,10 @@ fn parse_operator(parent: Pair<Rule>) -> Vec<Operator> {
 
         Rule::op_inside => { Operator::Inside }
         Rule::op_resideIn => { Operator::ResideIn }
-        Rule::op_accessed => { Operator::Accessed }
+        Rule::op_accessBy => { Operator::AccessBy }
         Rule::op_dependBy => { Operator::DependBy }
-        Rule::op_extend => { Operator::Extend }
+        //Rule::op_extend => { Operator::Extend }
+        Rule::op_extendBy => { Operator::ExtendBy }
         Rule::op_implement => { Operator::Implement }
         Rule::op_freeOfCircle => { Operator::FreeOfCircle }
         _ => {
@@ -282,6 +309,10 @@ fn parse_scope(parent: Pair<Rule>) -> RuleScope {
         Rule::extensive_scope => {
             let string = string_from_pair(pair);
             RuleScope::Extensive(string)
+        }
+        Rule::package_name_scope => {
+            let string = string_from_pair(pair);
+            RuleScope::PackageName(string)
         }
         _ => {
             println!("implementing scope: {:?}, text: {:?}", pair.as_rule(), pair.as_span());

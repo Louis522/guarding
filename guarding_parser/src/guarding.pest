@@ -12,7 +12,7 @@ declaration = {
 // file is a container of classes and functions
 // classes is a container of functions and field
 normal_rule = {
-	rule_level ~ ("(" ~ scope ~ ")")? ~ (use_symbol ~ expression)? ~ should? ~ only? ~ operator ~ assert ~ ";"?
+	rule_level ~ "["~attribute~("(" ~ scope ~ ")")?~"]" ~ (use_symbol ~ expression)? ~ should? ~ only? ~ operator ~ assert ~ ";"?
 }
 
 /*
@@ -46,6 +46,18 @@ layer_type = {
 layer_expression = {
     identifier ~ "(" ~ string ~ (comma ~ string)* ~ ")"
 }
+attribute = {
+       attrib*
+}
+attrib = {
+    "public" |
+    "private" |
+    "protected" |
+    "static" |
+    "final" |
+    "abstract"
+}
+
 
 scope = {
     path_scope |
@@ -54,6 +66,7 @@ scope = {
     assignable_scope |
     match_scope |
     actively_native_scope |
+    package_name_scope |
     extensive_scope
 }
 
@@ -79,6 +92,9 @@ actively_native_scope = {
     "activelynative" ~ string
 }
 
+package_name_scope = {
+    "packagename" ~ string
+}
 extensive_scope = {
     "extensive" ~ string
 }
@@ -128,10 +144,11 @@ operator = {
 	op_startsWith |
 	op_resideIn |
 	op_inside |
-	op_accessed |
+	op_accessBy |
 	op_dependBy |
-	op_extend  |
+//	op_extend  |
 	op_implement |
+	op_extendBy |
 	op_freeOfCircle
 
 }
@@ -144,10 +161,11 @@ op_startsWith     = { "startsWith" }
 // todo: thinking in define packages ops
 op_inside	      = { "inside" }
 op_resideIn	      = { "resideIn" }
-op_accessed	      = { "accessed" }
+op_accessBy	      = { "accessBy" }
 op_dependBy	      = { "dependBy" }
 
-op_extend         = { "extend" }
+//op_extend         = { "extend" }
+op_extendBy       = { "extendBy" }
 op_implement      = { "implement"}
 op_freeOfCircle      = { "freeOfCircle"}
 

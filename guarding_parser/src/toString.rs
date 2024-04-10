@@ -1,12 +1,15 @@
 use std::convert::TryInto;
+use std::ffi::c_int;
 use std::fmt::write;
+use heck::ToTitleCase;
 use std::fmt::{Display, Formatter, Result};
-use crate::ast::{Expr, GuardRule, Operator,RuleAssert, RuleLevel, RuleType, RuleScope};
+use crate::ast::{Expr, GuardRule, Operator,RuleAssert,Attribute, RuleLevel, RuleType, RuleScope};
 
 impl ToString for GuardRule {
     fn to_string(&self) -> String {
-        let mut result = format!("{}that().{}.should().{}{}",
+        let mut result = format!("{}.that().{}{}.should().{}{}",
                self.level.to_string(),
+               vec_attribute_to_string(&self.attr),
                //that
                //多个scope组合
                self.scope.to_string(),
@@ -27,12 +30,49 @@ impl ToString for GuardRule {
 impl ToString for RuleLevel {
     fn to_string(&self) -> String {
         match self {
-            RuleLevel::Class => "classes().".to_string(),
-            RuleLevel::Package => "package().".to_string(),
-            RuleLevel::Function => "function().".to_string(),
-            RuleLevel::Struct => "struct().".to_string(),
+            RuleLevel::Class => "classes()".to_string(),
+            RuleLevel::Package => "package()".to_string(),
+            RuleLevel::Function => "function()".to_string(),
+            RuleLevel::Struct => "struct()".to_string(),
             // ... 对其他级别的转换
         }
+    }
+}
+
+fn vec_attribute_to_string(attr: &Vec<Attribute>) -> String {
+    //println!("{}",attr.len());
+    let mut result = String::new();
+    let mut iter = attr.iter();
+
+    let mut index = 0;
+    while true {
+        if let Some(op) = iter.next() {
+            index += 1;
+            result.push_str(match op {
+                Attribute::Public => "BePublic().and().",
+                Attribute::Private => "BePrivate().and().",
+                Attribute::Protected => "BeProtected().and().",
+                Attribute::Static => "BeStatic().and().",
+                Attribute::Final => "BeFinal().and().",
+                Attribute::Abstract => "BeAbstract().and().",
+                _ => "op.to_string().as_str()",
+            })
+
+        } else {
+              break;
+        }
+    }
+
+    result
+}
+fn to_string_without_brackets(s: String, s2: i8) -> String {
+    let original_string = s.to_string().to_title_case();
+    let len = original_string.len();
+    if len >= 3 && &original_string[len - 3..] == "()."
+    {
+        original_string[..len - (s2 as usize)].to_string()
+    } else {
+        original_string.clone()
     }
 }
 
@@ -62,8 +102,9 @@ impl ToString for RuleScope {
             RuleScope::Assignable(assignable) => format!("Assignable({})", assignable),
             RuleScope::Implementation(implementation) => format!("Implementation({})", implementation),
             RuleScope::MatchRegex(regex) => format!("MatchRegex({})", regex),
-            RuleScope::ActivelyNative(path) => format!("areActivelyNative().and().resideInAPackage(\"{}\")", path), //????????????????
-            RuleScope::Extensive(path) => format!("areExtensive().and().resideInAPackage(\"{}\").", path),
+            RuleScope::ActivelyNative(path) => format!("areActivelyNative().andShould().resideInAPackage(\"{}\")", path), //????????????????
+            RuleScope::Extensive(path) => format!("areExtensive().andShould().resideInAPackage(\"{}\")", path),
+            RuleScope::PackageName(path) => format!("resideInAPackage(\"{}\")", path),
             //...其他scope扩充/多scope处理
         }
     }
@@ -71,7 +112,7 @@ impl ToString for RuleScope {
 
 
 fn vec_operator_to_string(ops: &Vec<Operator>) -> String {
-    println!("{}",ops.len());
+    //println!("{}",ops.len());
     let mut result = String::new();
     let mut iter = ops.iter();
 
@@ -85,9 +126,10 @@ fn vec_operator_to_string(ops: &Vec<Operator>) -> String {
                     index += 1;
                     if let Some(next_op) = iter.next() {
                         match next_op {
-                            Operator::Accessed => "notAccessed",
-                            Operator::DependBy => "notDependBy",
-                            Operator::Extend => "notbeExtendedBy",
+                            Operator::AccessBy => "notBeAccessedBy",
+                            Operator::DependBy => "notBeDependBy",
+                            Operator::Extend => "notExtend",
+                            Operator::ExtendBy => "notBeExtendedBy",
                             Operator::Implement => "notImplement",
                             Operator::FreeOfCircle => "notFreeOfCircle",
                             _ => &  "not something",
@@ -96,9 +138,10 @@ fn vec_operator_to_string(ops: &Vec<Operator>) -> String {
                         panic!("Invalid operator sequence: 'Not' must be followed by another operator");
                     }
                 }
-                Operator::Accessed => "Accessed",
-                Operator::DependBy => "DependBy",
-                Operator::Extend => "beExtendedBy",
+                Operator::AccessBy => "BeAccessedBy",
+                Operator::DependBy => "BeDependedBy",
+                Operator::Extend => "Extend",
+                Operator::ExtendBy => "BeExtendedBy",
                 Operator::Implement => "Implement",
                 Operator::FreeOfCircle => "FreeOfCircle",
                 _ => "op.to_string().as_str()",
@@ -118,7 +161,11 @@ impl ToString for RuleAssert {
         match self {
             RuleAssert::Empty => "".to_string(),
             RuleAssert::Stringed(RuleScope,String) => self.to_string(),
-            RuleAssert::Leveled(RuleLevel,RuleScope,String)=> format!("{}that().{}",RuleLevel.to_string(),RuleScope.to_string()),
+            RuleAssert::Leveled(RuleLevel,RuleScope,String)=> {
+                let str1= to_string_without_brackets(RuleLevel.to_string(),2);
+                let str2=to_string_without_brackets(RuleScope.to_string(),1);
+                format!("{}That().{}",str1,RuleScope.to_string())
+            },
                 /**
                 {
                 match self{
@@ -134,6 +181,14 @@ impl ToString for RuleAssert {
             // ... 对其他断言的转换
         }
     }
+}
+
+fn remove_last_two_chars(s: &str) -> &str {
+    let mut chars = s.chars();
+    if chars.by_ref().count() >= 3 {
+        chars.nth_back(3);
+    }
+    chars.as_str()
 }
 
 

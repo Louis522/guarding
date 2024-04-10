@@ -1,6 +1,0 @@
-detectTarget: # metric
-  threshold:
-    target: SS
-    cc: 5
-    cm: 6
-    fanout: 3

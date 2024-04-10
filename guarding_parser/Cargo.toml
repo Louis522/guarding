@@ -29,6 +29,7 @@ pest_derive = "2.1.0"
 # serialize
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1"
+heck = "0.5.0"
 
 [lib]
 name = "guarding_parser"

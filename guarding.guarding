@@ -7,4 +7,4 @@
 //class(implementation "Connection")::name should endsWith "Connection";
 //class(implementation "Connection.class") should extend (["..myapp..")]);
 //class（implementation "Connection.class") should not extend [implementation "Connection.class"]
-class(activelynative "EntityManager.class") should not extend class( extensive "..");
+class[public final (packagename "myclass")] should not extendBy class(extensive "..");
