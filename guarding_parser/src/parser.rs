@@ -126,6 +126,8 @@ fn parse_attr(parent: Pair<Rule>) -> Vec<Attribute> {
         "static" => { Attribute::Static }
         "final" => { Attribute::Final }
         "abstract" => { Attribute::Abstract }
+        "activelynative" => { Attribute::ActivelyNative }
+        "extensive" => { Attribute::Extensive }
         _ => {
             panic!("implementing ops: {:?}, text: {:?}", pair.as_rule(), pair.as_span())
         }

@@ -151,6 +151,8 @@ pub enum Attribute {
     Static,
     Final,
     Abstract,
+    ActivelyNative,
+    Extensive,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]

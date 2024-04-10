@@ -55,6 +55,8 @@ fn vec_attribute_to_string(attr: &Vec<Attribute>) -> String {
                 Attribute::Static => "areStatic().and().",
                 Attribute::Final => "areFinal().and().",
                 Attribute::Abstract => "areAbstract().and().",
+                Attribute::ActivelyNative => "areActivelyNative().and().",
+                Attribute::Extensive => "areExtensive().and().",
                 _ => "op.to_string().as_str()",
             })
 

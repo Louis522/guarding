@@ -55,7 +55,9 @@ attrib = {
     "protected" |
     "static" |
     "final" |
-    "abstract"
+    "abstract"|
+    "activelynative"|
+    "extensive"
 }
 
 
