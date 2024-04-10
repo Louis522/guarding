@@ -49,12 +49,12 @@ fn vec_attribute_to_string(attr: &Vec<Attribute>) -> String {
         if let Some(op) = iter.next() {
             index += 1;
             result.push_str(match op {
-                Attribute::Public => "BePublic().and().",
-                Attribute::Private => "BePrivate().and().",
-                Attribute::Protected => "BeProtected().and().",
-                Attribute::Static => "BeStatic().and().",
-                Attribute::Final => "BeFinal().and().",
-                Attribute::Abstract => "BeAbstract().and().",
+                Attribute::Public => "arePublic().and().",
+                Attribute::Private => "arePrivate().and().",
+                Attribute::Protected => "areProtected().and().",
+                Attribute::Static => "areStatic().and().",
+                Attribute::Final => "areFinal().and().",
+                Attribute::Abstract => "areAbstract().and().",
                 _ => "op.to_string().as_str()",
             })
 
