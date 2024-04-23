@@ -80,25 +80,29 @@ match_scope = {
     "match" ~ "(" ~ string ~ ")"
 }
 assignable_scope = {
-    "assignable" ~ string
+    "assignable" ~ string ~ extent
 }
 extend_scope = {
-    "extends" ~ string
+    "extends" ~ string ~ extent
 }
 
 impl_scope = {
-    "implementation" ~ string
+    "implementation" ~ string ~ extent
 }
 
 actively_native_scope = {
-    "activelynative" ~ string
+    "activelynative" ~ string ~ extent
 }
 
 package_name_scope = {
-    "packagename" ~ string
+    "packagename" ~string ~ extent
 }
 extensive_scope = {
-    "extensive" ~ string
+    "extensive" ~ string ~ extent
+}
+
+extent ={
+ ("," ~ string)*?
 }
 
 expression = {
@@ -117,20 +121,28 @@ assert = {
 }
 
 array_stringed = {
-    "(" ~ "[" ~ scope? ~ string ~ ("," ~ string)* ~ "]" ~ ")"
+    rule_level?~ "["~attribute? ~"("  ~ (scope?) ~ ")"~ "]"
 }
 
 stringed = {
-    "("? ~"("~ scope? ~")"~ string ~ ")"?
+    "("?~ (scope?) ~ string ~ ")"?
 }
 
 leveled = {
-    rule_level ~ "(" ~ scope?~ ")"
+    rule_level ~ "(" ~ scope? ~ ")"
 }
 
 sized = {
     int
 }
+
+/*array_stringed = {
+    "(" ~ "[" ~ string ~ ("," ~ string)* ~ "]" ~ ")"
+}
+
+stringed = {
+    "("? ~ string ~ ")"?
+}*/
 
 operator = {
     op_not ~ operator |

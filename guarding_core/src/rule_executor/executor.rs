@@ -159,9 +159,9 @@ impl RuleExecutor {
                     RuleAssert::Stringed(scp,pkg_identifier) => {
                         assert_models = self.filter_classes_by_package_identifier(pkg_identifier);
                     }
-                    RuleAssert::ArrayStringed(scp,identifiers) => {
+                    RuleAssert::ArrayStringed(level,identifiers,scp) => {
                         for ident in identifiers {
-                            assert_models.extend(self.filter_classes_by_package_identifier(ident));
+                     //       assert_models.extend(self.filter_classes_by_package_identifier(ident));
                         }
                     }
                     _ => {}

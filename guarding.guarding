@@ -7,4 +7,6 @@
 //class(implementation "Connection")::name should endsWith "Connection";
 //class(implementation "Connection.class") should extend (["..myapp..")]);
 //class（implementation "Connection.class") should not extend [implementation "Connection.class"]
-class[public final activelynative (packagename "myclass")] should not extendBy class(extensive "..");
+//class[public final activelynative (packagename "myclass","myclass1","myclass2")] should not extendBy class(extensive "..");
+//class[public final activelynative (packagename "myclass","myclass1")] should not extendBy class[activelynative(extensive "..controller..", "..service..","..service..","..service..")];
+

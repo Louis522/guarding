@@ -1,0 +1,95 @@
+·<自然语言描述规则，DSL语法，规则的DSL>,我需要的输出结果是描述规则的DSL，请学习我给出的这几个例子，而后我会输入自然语言描述规则，请输出 规则的DSL(只生成结果)。
+·DSL语法{
+rule_level ~ "["~attribute~("(" ~ scope ~ ")")?~"]"  ~ should? ~ only? ~ operator ~ assert ~ ";"?
+
+rule_level = {
+    "package" |
+    “class” |
+    “struct” |
+    "function" |
+    "file"
+}
+attribute = {
+       attrib*
+}
+attrib = {
+    "public" |
+    "private" |
+    "protected" |
+    "static" |
+    "final" |
+    "abstract"|
+    "activelynative"|
+    "extensive"
+}
+
+scope = {
+    actively_native_scope |
+    package_name_scope |
+    extensive_scope
+}
+
+actively_native_scope = {
+    "activelynative" ~ string ~ extent
+}
+
+package_name_scope = {
+    "packagename" ~ string ~ extent
+}
+extensive_scope = {
+    "extensive" ~ string ~ extent
+}
+extent ={
+ ("," ~ string)*?
+}
+
+assert = {
+    leveled |
+    stringed |
+    array_stringed |
+    sized
+}
+
+array_stringed = {
+    rule_level?~ "["~attribute? ~"("  ~ (scope?) ~ ")"~ "]"
+}
+
+stringed = {
+    "("?~ (scope?) ~ string ~ ")"?
+}
+
+leveled = {
+    rule_level ~ "(" ~ scope? ~ ")"
+}
+
+sized = {
+    int
+}
+operator = {
+
+	op_accessBy |
+	op_dependBy |
+                op_extend  |
+	op_implement |
+	op_extendBy |
+	op_freeOfCircle
+
+}
+op_accessBy	      = { "accessBy" }
+op_dependBy	      = { "dependBy" }
+op_extendBy       = { "extendBy" }
+op_implement      = { "implement"}
+op_freeOfCircle      = { "freeOfCircle"}
+
+should            = { "should" }
+only              = { "only" }
+
+}
+·学习例子
+<packgeA里原生的类不应该被packageB里伴生的类继承，rule_level ~ “[”~attribute~(“(” ~ scope ~ “)”)?~“]” ~ should? ~ only? ~ operator ~ assert ~ “;”?，class[activelynative(packagename “packageA”)] should not extendedBy class[extensive(packagename “packageB”)]>；
+<packgeA里公共的类不应该被packageB里的final类继承， rule_level ~ "["~attribute~("(" ~ scope ~ ")")?~"]" ~ should? ~ only? ~ operator ~ assert ~ ";"?,class[public(packagename “packageA”)] should not extendedBy class[final(packagename “packageB”)]>；
+<packgeC里原生公共的类不应该被packageB，packageC,packageD里伴生的类继承， rule_level ~ “[”~attribute~(“(” ~ scope ~ “)”)?~“]” ~ should? ~ only? ~ operator ~ assert ~ “;”?，class[activelynative public (packagename “packageC”)] should not extendedBy class[extensive(packagename “packageB”,”packageC”,”packageD”)]>；
+<packgeB,packageC里原生的类不可以被packageD里伴生公共的类实现， rule_level ~ “[”~attribute~(“(” ~ scope ~ “)”)?~“]” ~ should? ~ only? ~ operator ~ assert ~ “;”?，class[activelynative public (packagename “packageB”,”packageC”)] should not implement class[extensive public(packagename “packageD”)]>；
+<packgeD里原生的类不会被packageB里伴生公共的类实现， rule_level ~ “[”~attribute~(“(” ~ scope ~ “)”)?~“]” ~ should? ~ only? ~ operator ~ assert ~ “;”?，class[activelynative public (packagename "packageD")] should not implement class[extensive public(packagename "packageB")]>
+
+

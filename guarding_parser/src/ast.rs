@@ -106,9 +106,9 @@ pub enum RuleScope {
     Assignable(String),
     Implementation(String),
     MatchRegex(String),
-    ActivelyNative(String),
-    Extensive(String),
-    PackageName(String),
+    ActivelyNative(Vec<String>),
+    Extensive(Vec<String>),
+    PackageName(Vec<String>),
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -198,6 +198,6 @@ pub enum RuleAssert {
     Empty,
     Stringed(RuleScope,String),
     Leveled(RuleLevel,RuleScope,String),
-    ArrayStringed(RuleScope,Vec<String>),
+    ArrayStringed(RuleLevel,Vec<Attribute>,RuleScope),
     Sized(usize),
 }

@@ -11,3 +11,4 @@ pub mod parser;
 pub mod errors;
 pub mod support;
 mod toString;
+pub mod interact_with_qianwen;

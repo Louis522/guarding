@@ -257,13 +257,18 @@ fn parse_assert(parent: Pair<Rule>) -> RuleAssert {
             RuleAssert::Stringed(scp,str.to_string())
         }
         Rule::array_stringed => {
-            let mut array = vec![];
+            //let mut array = vec![];
             let mut scp = RuleScope::All;
+            let mut level = RuleLevel::Class;
+            let mut attributes: Vec<Attribute> = vec![];
             for p in pair.into_inner() {
                 match p.as_rule() {
-                    Rule::string => {
-                        let str = str_support::replace_string_markers(p.as_str());
-                        array.push(str);
+                    Rule::rule_level => {
+                        level = parse_rule_level(p);
+                    }
+
+                    Rule::attribute => {
+                        attributes = parse_attr(p);;
                     }
                     Rule::scope => {
                         scp = parse_scope(p);
@@ -272,7 +277,7 @@ fn parse_assert(parent: Pair<Rule>) -> RuleAssert {
                 }
             }
 
-            RuleAssert::ArrayStringed(scp,array)
+            RuleAssert::ArrayStringed(level,attributes,scp)
         }
         _ => { RuleAssert::Empty }
     }
@@ -288,7 +293,7 @@ fn parse_scope(parent: Pair<Rule>) -> RuleScope {
             let string = str_support::unescape(without_markers.as_str()).expect("incorrect string literal");
             RuleScope::PathDefine(string)
         }
-        Rule::assignable_scope => {
+        /*Rule::assignable_scope => {
             let string = string_from_pair(pair);
             RuleScope::Assignable(string)
         }
@@ -303,7 +308,7 @@ fn parse_scope(parent: Pair<Rule>) -> RuleScope {
         Rule::impl_scope => {
             let string = string_from_pair(pair);
             RuleScope::Implementation(string)
-        }
+        }*/
         Rule::actively_native_scope => {
             let string = string_from_pair(pair);
             RuleScope::ActivelyNative(string)
@@ -323,18 +328,32 @@ fn parse_scope(parent: Pair<Rule>) -> RuleScope {
     }
 }
 
-fn string_from_pair(pair: Pair<Rule>) -> String {
-    let mut string = "".to_string();
+fn string_from_pair(pair: Pair<Rule>) -> Vec<String> {
+   // let mut string = "".to_string();
+    let mut result=vec![];
     for p in pair.into_inner() {
         match p.as_rule() {
-            Rule::string => {
+            Rule::extent => {
+                for inner in p.into_inner() {
+                    match inner.as_rule(){
+                        Rule::string => {
+                            let without_markers = str_support::replace_string_markers(inner.as_str());
+                            let string = str_support::unescape(without_markers.as_str()).expect("incorrect string literal");
+                            result.push(string);
+                        }
+                        _ => {}
+                    }
+                }
+            }
+            Rule::string=>{
                 let without_markers = str_support::replace_string_markers(p.as_str());
-                string = str_support::unescape(without_markers.as_str()).expect("incorrect string literal");
+                let string = str_support::unescape(without_markers.as_str()).expect("incorrect string literal");
+                result.push(string);
             }
             _ => {}
         }
     }
-    string
+    result
 }
 
 #[cfg(test)]

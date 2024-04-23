@@ -67,6 +67,36 @@ fn vec_attribute_to_string(attr: &Vec<Attribute>) -> String {
 
     result
 }
+fn vec_assert_attribute_to_string(attr: &Vec<Attribute>) -> String {
+    //println!("{}",attr.len());
+    let mut result = String::new();
+    let mut iter = attr.iter();
+
+    let mut index = 0;
+    while true {
+        if let Some(op) = iter.next() {
+            index += 1;
+            result.push_str(match op {
+                Attribute::Public => "arePublic().andShould().",
+                Attribute::Private => "arePrivate().andShould().",
+                Attribute::Protected => "areProtected().andShould().",
+                Attribute::Static => "areStatic().andShould().",
+                Attribute::Final => "areFinal().andShould().",
+                Attribute::Abstract => "areAbstract().andShould().",
+                Attribute::ActivelyNative => "areActivelyNative().andShould().",
+                Attribute::Extensive => "areExtensive().andShould().",
+                _ => "op.to_string().as_str()",
+            })
+
+        } else {
+            break;
+        }
+    }
+
+    result
+}
+
+//首字母大写+去掉若干尾字符
 fn to_string_without_brackets(s: String, s2: i8) -> String {
     let original_string = s.to_string().to_title_case();
     let len = original_string.len();
@@ -104,14 +134,29 @@ impl ToString for RuleScope {
             RuleScope::Assignable(assignable) => format!("Assignable({})", assignable),
             RuleScope::Implementation(implementation) => format!("Implementation({})", implementation),
             RuleScope::MatchRegex(regex) => format!("MatchRegex({})", regex),
-            RuleScope::ActivelyNative(path) => format!("areActivelyNative().andShould().resideInAPackage(\"{}\")", path), //????????????????
-            RuleScope::Extensive(path) => format!("areExtensive().andShould().resideInAPackage(\"{}\")", path),
-            RuleScope::PackageName(path) => format!("resideInAPackage(\"{}\")", path),
+            RuleScope::ActivelyNative(path) => format!("areActivelyNative().andShould().{}", path_join(path)), //????????????????
+            RuleScope::Extensive(path) => format!("areExtensive().andShould().{}", path_join(path)),
+            RuleScope::PackageName(path) => format!("{}", path_join(path)),
             //...其他scope扩充/多scope处理
         }
     }
 }
+//对象路径处理
+fn path_join(path: &Vec<String>) -> String {
+    let mut result = String::new();
 
+    for (i, app) in path.iter().enumerate() {
+        result.push_str("resideInAPackage(");
+        result.push_str(app);
+        result.push_str(")");
+
+        if i != path.len() - 1 {
+            result.push_str(".and().");
+        }
+    }
+
+    result
+}
 
 fn vec_operator_to_string(ops: &Vec<Operator>) -> String {
     //println!("{}",ops.len());
@@ -175,10 +220,14 @@ impl ToString for RuleAssert {
 
                     _ => {}
                 }
-
-            } .to_string(),
+                
 */
-            RuleAssert::ArrayStringed(RuleScope,String)=> "NotEmpty".to_string(),
+            RuleAssert::ArrayStringed(RuleLevel,Attribute,RuleScope)=> {
+                let str1= to_string_without_brackets(RuleLevel.to_string(),2);
+                let str2=vec_assert_attribute_to_string(Attribute);
+                let str3=to_string_without_brackets(RuleScope.to_string(),1);
+                format!("{}That().{}{}",str1,str2,RuleScope.to_string())
+            }
             RuleAssert::Sized(usize)=> "NotEmpty".to_string()
             // ... 对其他断言的转换
         }

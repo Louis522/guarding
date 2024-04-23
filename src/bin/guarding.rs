@@ -1,8 +1,9 @@
 use std::fs;
 use std::path::PathBuf;
-
+use tokio;
 use clap::{AppSettings, Clap};
 use guarding::exec_guarding;
+use guarding_parser::interact_with_qianwen;
 
 #[derive(Clap)]
 #[clap(version = "1.0", author = "Inherd Group <group@inherd.org>")]
@@ -21,6 +22,7 @@ struct Opts {
 fn main() {
     let opts: Opts = Opts::parse();
 
+    interact_with_qianwen::llm_trans_with_qianwen();
     let buf = PathBuf::from(opts.path);
     let conf = PathBuf::from(opts.config);
     let content = fs::read_to_string(conf).unwrap();
