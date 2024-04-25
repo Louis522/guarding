@@ -99,7 +99,7 @@ pub async fn llm_trans_with_qianwen() {
             return;
         }
     };
-    println!("请输入检测：");
+    println!("请输入：");
     match io::stdin().read_line(&mut input){
         Ok(_) => {
             println!("输入的内容是：{}", input.trim());

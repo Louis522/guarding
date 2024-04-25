@@ -8,5 +8,16 @@
 //class(implementation "Connection.class") should extend (["..myapp..")]);
 //class（implementation "Connection.class") should not extend [implementation "Connection.class"]
 //class[public final activelynative (packagename "myclass","myclass1","myclass2")] should not extendBy class(extensive "..");
-//class[public final activelynative (packagename "myclass","myclass1")] should not extendBy class[activelynative(extensive "..controller..", "..service..","..service..","..service..")];
-
+//class[public final activelynative (packagename "myclass","myclass1")] should not extendBy class[activelynative(extensive "..controller..", "..service..","..service..","..service.."
+//class[activelynative public(packagename "Service")] should not implement class[extensive public(packagename "controller")]
+//class[activelynative public (packagename "Service")] should not implement class[extensive public(packagename "controller")]
+//class[activelynative(public|private|protected)(packagename "service", "myapp")] should not implement class[extensive activelynative(packagename "msmq")]
+//class[activelynative public private (packagename "service", "myapp")] should not implement class[extensive activelynative (packagename "msmq")]
+//rule_level[class] [activelynative(package_name "service", "myapp")] should not implement class[extensive(actively_native_scope "msmq")]
+//class[activelynative public (packagename "Service")] should not implement class[extensive (packagename "controller")]
+//class[activelynative public static (packagename "Service", "msmq")] should not implement class[extensive private(packagename "controller")]
+//class[activelynative public (packagename "Service")] should not implement class[extensive (packagename "controller")]
+//class[activelynative public static (packagename "Service", "msmq")] should not implement class[extensive private(packagename "controller")]
+//rule_level[class] [activelynative(package_name "Service"),public(static),package_name("msmq")] should not implement class[activelynative(private),package_name("controller")]
+//class[extensive public static (packagename "Service", "msmq")] should not implement class[activelynative private(packagename "controller")]
+//class[extensive public (packagename "Service")] should not implement class[activelynative (packagename "controller")]
