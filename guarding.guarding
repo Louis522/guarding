@@ -21,3 +21,4 @@
 //rule_level[class] [activelynative(package_name "Service"),public(static),package_name("msmq")] should not implement class[activelynative(private),package_name("controller")]
 //class[extensive public static (packagename "Service", "msmq")] should not implement class[activelynative private(packagename "controller")]
 //class[extensive public (packagename "Service")] should not implement class[activelynative (packagename "controller")]
+class[extensive public static (packagename "Service", "msmq")] should not implement class[activelynative private static(packagename "controller")]

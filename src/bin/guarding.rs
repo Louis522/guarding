@@ -15,19 +15,26 @@ struct Opts {
     #[clap(short, long, default_value = "src")]
     path: String,
 
-    #[clap(short, long, default_value = "guard.json")]
+   // #[clap(short, long, default_value = "guard.json")]
+   // output: String,
+    #[clap(short, long, default_value = "api.json")]
     output: String,
+
+
+    // #[clap(short, long, default_value = "api.txt")]
+   // outfile: String,
 }
 
 fn main() {
     let opts: Opts = Opts::parse();
 
-    interact_with_qianwen::llm_trans_with_qianwen();
+   // interact_with_qianwen::llm_trans_with_qianwen();
     let buf = PathBuf::from(opts.path);
     let conf = PathBuf::from(opts.config);
+    let output = PathBuf::from(opts.output);
     let content = fs::read_to_string(conf).unwrap();
 
-    let errors = exec_guarding(content, buf);
+    let errors = exec_guarding(content, buf,output);
     // let content = serde_json::to_string_pretty(&errors).unwrap();
     // let _ = fs::write(opts.output, content);
 }
