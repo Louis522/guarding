@@ -34,6 +34,7 @@ reqwest = { version = "0.12.3", features = ["blocking","json"] }
 blocking = "1.5.1"
 tokio = { version = "1.2.0", features = ["full"] }
 hyper = { version = "1.3.1", features = ["client", "http1", "http2"] }
+regex = "1.10.4"
 
 [lib]
 name = "guarding_parser"

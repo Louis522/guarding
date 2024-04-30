@@ -1,6 +1,9 @@
 use std::convert::TryInto;
 use std::ffi::c_int;
-use std::fmt::write;
+use std::fmt::{format, write};
+extern crate regex;
+
+use regex::Regex;
 use heck::ToTitleCase;
 use std::fmt::{Display, Formatter, Result};
 use crate::ast::{Expr, GuardRule, Operator, RuleAssert, Attribute, RuleLevel, RuleType, RuleScope};
@@ -10,7 +13,8 @@ impl ToString for GuardRule {
         let  Opr=vec_operator_to_string(&self.ops, &self.assert);
         let mut result = format!("{}.that().{}{}.should().{}",
                                  self.level.to_string(),
-                                 vec_attribute_to_string(&self.attr),
+
+                                 vec_attribute_to_string(&self.attr, &self.scope),
                                  //that
                                  self.scope.to_string(),
                                  //should
@@ -22,7 +26,7 @@ impl ToString for GuardRule {
                                  // guard_rule.ops.to_sting(),
                                  //vec_operator_to_string(&self.ops, &self.assert),
                                  //近似scope处理
-                                 Vec_assert_to_string(&self.assert,Opr));
+                                 Vec_assert_to_string(&self.assert,Opr,&self.scope));
                                  //self.assert.to_string());
         result
     }
@@ -31,7 +35,7 @@ impl ToString for GuardRule {
     }*/
 }
 
-fn Vec_assert_to_string(assert: &RuleAssert, opr: String) -> String {
+fn Vec_assert_to_string(assert: &RuleAssert, opr: String, scope: &RuleScope) -> String {
     let mut result = String::new();
     {
         result.push_str(&*opr);
@@ -49,6 +53,26 @@ fn Vec_assert_to_string(assert: &RuleAssert, opr: String) -> String {
                     result.push_str(&*opr);
                 }
                 result.push_str(&*scp.to_string());
+
+/**
+ assert的scope若为All,去除末尾.and().andShould().notImplementClassesThat().
+后续若有
+ */
+                match scp {
+                    RuleScope::All => {
+                       //由于rust特性,无法对string使用pop
+                        //Implementoperator
+                        if opr=="notImplementClassesThat()"{
+                            //result.drain(result.len()-38..);
+                        }
+                        println!("{}", result);
+                        //
+                    }
+                    _ => {
+                    }
+
+                }
+
             }
             _ => {}
         }
@@ -58,6 +82,12 @@ fn Vec_assert_to_string(assert: &RuleAssert, opr: String) -> String {
     result
 }
 
+fn trim_after_last_andshould(input: &str) -> String {
+    // 创建一个正则表达式，匹配以"andShould()"开始直到字符串结束的部分
+    let re = Regex::new(r"andShould\(\).+$").unwrap();
+    // 使用replace_all方法移除匹配到的部分
+    re.replace_all(input, "").into_owned()
+}
 
 /*
 
@@ -140,7 +170,7 @@ impl ToString for RuleLevel {
     }
 }
 
-fn vec_attribute_to_string(attr: &Vec<Attribute>) -> String {
+fn vec_attribute_to_string(attr: &Vec<Attribute>, scope: &RuleScope) -> String {
     //println!("{}",attr.len());
     let mut result = String::new();
     let mut iter = attr.iter();
@@ -162,6 +192,14 @@ fn vec_attribute_to_string(attr: &Vec<Attribute>) -> String {
             })
         } else {
             break;
+        }
+    }
+    //匹配是否scope为All,进行处理去除末尾.and().
+    match scope {
+        RuleScope::All => {
+            result.drain(result.len() - 7..);
+        }
+        _ => {
         }
     }
 
@@ -228,7 +266,7 @@ impl ToString for Operator {
 impl ToString for RuleScope {
     fn to_string(&self) -> String {
         match self {
-            RuleScope::All => "All".to_string(),
+            RuleScope::All => "".to_string(),
             RuleScope::PathDefine(path) => format!("PathDefine({})", path),
             RuleScope::Extend(extension) => format!("Extend({})", extension),
             RuleScope::Assignable(assignable) => format!("Assignable({})", assignable),

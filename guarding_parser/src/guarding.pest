@@ -121,7 +121,7 @@ assert = {
 }
 
 array_stringed = {
-    rule_level?~ "["~attribute? ~"("  ~ (scope?) ~ ")"~ "]"
+    rule_level?~ "["~attribute? ~"("?  ~ scope?~ ")"?~ "]"
 }
 
 stringed = {
