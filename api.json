@@ -1,3 +1,3 @@
 {
-  "result": "classes().that().areExtensive().and().arePublic().should().notImplementClassesThat().areActivelyNative().andShould().notImplementClassesThat().arePublic().andShould().notImplementClassesThat()."
+  "result": "classes().that().areExtensive().and().arePublic().should().notImplementClassesThat().beActivelyNative().andShould().notImplementClassesThat().bePublic().andShould().notImplementClassesThat().resideInAnyPackage(Service,msmq)"
 }

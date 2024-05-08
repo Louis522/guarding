@@ -1,6 +1,7 @@
 use std::convert::TryInto;
 use std::ffi::c_int;
 use std::fmt::{format, write};
+
 extern crate regex;
 
 use regex::Regex;
@@ -10,29 +11,24 @@ use crate::ast::{Expr, GuardRule, Operator, RuleAssert, Attribute, RuleLevel, Ru
 
 impl ToString for GuardRule {
     fn to_string(&self) -> String {
-        let  Opr=vec_operator_to_string(&self.ops, &self.assert);
+        let Opr = vec_operator_to_string(&self.ops, &self.assert);
         let mut result = format!("{}.that().{}{}.should().{}",
                                  self.level.to_string(),
-
                                  vec_attribute_to_string(&self.attr, &self.scope),
                                  //that
                                  self.scope.to_string(),
                                  //should
                                  // self.origin,
-
                                  // guard_rule.ty.to_string(),
                                  // guard_rule.expr.to_string(),
                                  //首字符是否为Not,
                                  // guard_rule.ops.to_sting(),
                                  //vec_operator_to_string(&self.ops, &self.assert),
                                  //近似scope处理
-                                 Vec_assert_to_string(&self.assert,Opr,&self.scope));
-                                 //self.assert.to_string());
+                                 Vec_assert_to_string(&self.assert, Opr, &self.scope));
+        //self.assert.to_string());
         result
     }
-
-    /*fn to_json(&self) -> String {
-    }*/
 }
 
 fn Vec_assert_to_string(assert: &RuleAssert, opr: String, scope: &RuleScope) -> String {
@@ -40,45 +36,55 @@ fn Vec_assert_to_string(assert: &RuleAssert, opr: String, scope: &RuleScope) -> 
     {
         result.push_str(&*opr);
         match assert {
+            /**
+            ToDo
+             */
             RuleAssert::Empty => {}
-            RuleAssert::Stringed(scp,str) => {
-
-            }
-            RuleAssert::Leveled(lv, scp,package_ident) => {
-            }
+            RuleAssert::Stringed(scp, str) => {}
+            RuleAssert::Leveled(lv, scp, package_ident) => {}
             RuleAssert::ArrayStringed(lv, attr, scp) => {
-                let mut attribute=vec_assert_attribute_to_string(attr);
-                for(i,app) in attribute.iter().enumerate(){
-                    result.push_str(app);
+                let mut attribute = vec_assert_attribute_to_string(attr);
+                //app内容是.arePublic().should().等
+                for (i, app) in attribute.iter().enumerate() {
+                    // 检查app是否以"are"开头
+                    if let Some(app_slice) = app.strip_prefix("are") {
+                        // 如果是以"are"开头，则替换为"be"
+                        let modified_app = format!("be{}", app_slice);
+                        result.push_str(&modified_app);
+                    } else {
+                        // 如果不是以"are"开头，则直接追加原字符串
+                        result.push_str(app);
+                    }
+
+                if(opr.starts_with("not")){
                     result.push_str(&*opr);
                 }
-                result.push_str(&*scp.to_string());
-
-/**
- assert的scope若为All,去除末尾.and().andShould().notImplementClassesThat().
-后续若有
- */
-                match scp {
-                    RuleScope::All => {
-                       //由于rust特性,无法对string使用pop
-                        //Implementoperator
-                        if opr=="notImplementClassesThat()"{
-                            //result.drain(result.len()-38..);
-                        }
-                        println!("{}", result);
-                        //
-                    }
-                    _ => {
-                    }
-
+                    //result.push_str(&*opr);
                 }
 
+                /**
+                 assert的scope若为All,去除末尾.and().andShould().notImplementClassesThat().
+                后续若有
+                 */
+                match scp {
+                    RuleScope::All => {
+                        //由于rust特性,无法对string使用pop
+                        // 计算opr的长度并从result的末尾移除相应长度的字符串加上.should().一并移除
+                        let opr_length = opr.len();
+                        if(opr.starts_with("not")){
+                            //只去掉.should().
+                            result.truncate(result.len() - (opr_length + 13));
+                        }else{
+                            result.truncate(result.len() - 13);
+                        }
+                    }
+                    _ => {}
+                }
+                result.push_str(&*scp.to_string())
             }
             _ => {}
         }
-        //let mut attribute=vec_assert_attribute_to_string(&assert)
     }
-
     result
 }
 
@@ -89,7 +95,8 @@ fn trim_after_last_andshould(input: &str) -> String {
     re.replace_all(input, "").into_owned()
 }
 
-/*
+/**
+ToDO:带层级的Json输出
 
 classes() that() defined
 
@@ -155,7 +162,7 @@ andShould().notImplementClassesThat().resideInAPackage(controller) //
                   }
 ]
 }
-*/
+ */
 
 
 impl ToString for RuleLevel {
@@ -165,13 +172,12 @@ impl ToString for RuleLevel {
             RuleLevel::Package => "package()".to_string(),
             RuleLevel::Function => "function()".to_string(),
             RuleLevel::Struct => "struct()".to_string(),
-            // ... 对其他级别的转换
+            //ToDo ... 对其他级别的转换
         }
     }
 }
 
 fn vec_attribute_to_string(attr: &Vec<Attribute>, scope: &RuleScope) -> String {
-    //println!("{}",attr.len());
     let mut result = String::new();
     let mut iter = attr.iter();
 
@@ -199,8 +205,7 @@ fn vec_attribute_to_string(attr: &Vec<Attribute>, scope: &RuleScope) -> String {
         RuleScope::All => {
             result.drain(result.len() - 7..);
         }
-        _ => {
-        }
+        _ => {}
     }
 
     result
@@ -305,8 +310,9 @@ fn path_join(path: &Vec<String>) -> String {
 
 /**
  *预期notBeExtendedByClassesThat().
+  或者BeExtendedByClassesThat().
  */
-fn vec_operator_to_string(ops: &Vec<Operator>, assert: &RuleAssert) ->  String {
+fn vec_operator_to_string(ops: &Vec<Operator>, assert: &RuleAssert) -> String {
     //println!("{}",ops.len());
     let mut result = String::new();
     let mut iter = ops.iter();
@@ -327,12 +333,9 @@ fn vec_operator_to_string(ops: &Vec<Operator>, assert: &RuleAssert) ->  String {
                             Operator::FreeOfCircle => "notFreeOfCircle",
                             _ => &"not something",
                         }
-                    }
-                    else {
+                    } else {
                         panic!("Invalid operator sequence: 'Not' must be followed by another operator");
                     }
-
-
                 }
                 Operator::AccessBy => "BeAccessedBy",
                 Operator::DependBy => "BeDependedBy",
@@ -342,9 +345,9 @@ fn vec_operator_to_string(ops: &Vec<Operator>, assert: &RuleAssert) ->  String {
                 Operator::FreeOfCircle => "FreeOfCircle",
                 _ => "op.to_string().as_str()",
             }
-                /* *
-                 Todo:非not情况直接输出 需要进行函数改造
-                 */
+                            /* *
+                             Todo:非not情况直接输出 需要进行函数改造
+                             */
             )
         } else {}
     }
@@ -373,7 +376,8 @@ impl ToString for RuleAssert {
                 format!("{}That().{}{}", str1, str2, RuleScope.to_string());
                 format!("{}That().{}{}", str1, str2, RuleScope.to_string())
                  */
-                format!("{}",str1)
+                format!("{}", str1)
+
             }
             //             str1           str2                             RoleScope.to_string()
             //notImplement Classes That().areActivelyNative(). andShould().resideInAPackage(controller)
@@ -381,21 +385,10 @@ impl ToString for RuleAssert {
             //   notImplement Classes That()
             //添加: 在每一个andShould后加 notImplement Classes That()
             //   前段notImplement,   解决思路:operator_函数传入Assert的RuleScope,把class层级传入与前段拼接字符串.输出到result,该result传入到assert进行处理
-
             RuleAssert::Sized(usize) => "NotEmpty".to_string()
             // ... 对其他断言的转换
         }
     }
-
-}
-
-
-fn remove_last_two_chars(s: &str) -> &str {
-    let mut chars = s.chars();
-    if chars.by_ref().count() >= 3 {
-        chars.nth_back(3);
-    }
-    chars.as_str()
 }
 
 

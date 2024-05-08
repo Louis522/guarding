@@ -74,6 +74,7 @@ async fn call_api_and_write_to_file(api_key: &str, pre_command_text: &str,input_
     Ok(())
 }
 
+//大模型输出while循环
 fn extract_code_section(text: &str) -> Option<&str> {
     // 扩充处理逻辑
     Some(text)  //
