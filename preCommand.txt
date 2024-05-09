@@ -91,5 +91,8 @@ only              = { "only" }
 <packgeC里伴生的,公共的类不应该被packageB，packageC,packageD里原生的类继承， rule_level ~ “[”~attribute~(“(” ~ scope ~ “)”)?~“]” ~ should? ~ only? ~ operator ~ assert ~ “;”?，class[extensive public (packagename “packageC”)] should not extendedBy class[activelynative(packagename “packageB”,”packageC”,”packageD”)]>；
 <packgeB,packageC里伴生的,公共的类不可以被packageD里原生的,公共的类实现， rule_level ~ “[”~attribute~(“(” ~ scope ~ “)”)?~“]” ~ should? ~ only? ~ operator ~ assert ~ “;”?，class[extensive public (packagename “packageB”,”packageC”)] should not implement class[activelynative public(packagename “packageD”)]>；
 <packgeD里伴生的,公共的,静态的类不会被packageB里原生的,公共的类实现， rule_level ~ “[”~attribute~(“(” ~ scope ~ “)”)?~“]” ~ should? ~ only? ~ operator ~ assert ~ “;”?，class[extensive public static (packagename "packageD")] should not implement class[activelynative public(packagename "packageB")]>
+<伴生的,公共的,静态的类不会被原生的,公共的类实现， rule_level ~ “[”~attribute~(“(” ~ scope ~ “)”)?~“]” ~ should? ~ only? ~ operator ~ assert ~ “;”?，class[extensive public static] should not implement class[activelynative public]>
+<伴生的,公共的,静态的类可以被原生的,公共的类实现， rule_level ~ “[”~attribute~(“(” ~ scope ~ “)”)?~“]” ~ should? ~ only? ~ operator ~ assert ~ “;”?，class[extensive public static] should implement class[activelynative public]>
+<原生的,公共的类可以被原生的,静态的类实现， rule_level ~ “[”~attribute~(“(” ~ scope ~ “)”)?~“]” ~ should? ~ only? ~ operator ~ assert ~ “;”?，class[activilynative public] should implement class[extensive static]>
 
 

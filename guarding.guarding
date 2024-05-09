@@ -22,4 +22,9 @@
 //class[extensive public static (packagename "Service", "msmq")] should not implement class[activelynative private(packagename "controller")]
 //class[extensive public (packagename "Service")] should not implement class[activelynative (packagename "controller")]
 //class[extensive public static (packagename "Service", "msmq")] should not implement class[activelynative private static(packagename "controller")]
-class [extensive public] should not implement class[activelynative public]
+//class [extensive public] should not implement class[activelynative public]
+//class[static activelynative(packagename "packageX")] should not implement class[public extensive(packagename "packageY")]
+//class[static activelynative(packagename "service")] should not implement class[extensive public(packagename "controller")]
+//class[activelynative static] should not implement class[extensive public];
+//                                        bepublic
+class[static activelynative(packagename "service")] should implement class[extensive public(packagename "controller")]

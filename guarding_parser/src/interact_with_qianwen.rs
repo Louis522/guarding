@@ -73,7 +73,9 @@ async fn call_api_and_write_to_file(api_key: &str, pre_command_text: &str,input_
 
     Ok(())
 }
-
+/**
+ Todo:写一个异步函数更加合理,当guarding.rs写完api.json后,interractWithqianwen会继续执行在末尾行加//的操作
+ */
 //大模型输出while循环
 fn extract_code_section(text: &str) -> Option<&str> {
     // 扩充处理逻辑
@@ -85,7 +87,7 @@ pub async fn llm_trans_with_qianwen() {
     /**
     *输入apikey  https://help.aliyun.com/zh/dashscope/developer-reference/activate-dashscope-and-create-an-api-key
     */
-    let  api= "";
+    let  api= "sk-";
     let mut input = String::new();
     let pre_command_file_path = "C:/LSDocument/GitHub/guarding/preCommand.txt";
     let  client = Client::new();

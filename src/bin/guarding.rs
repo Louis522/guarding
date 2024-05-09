@@ -28,7 +28,7 @@ struct Opts {
 fn main() {
     let opts: Opts = Opts::parse();
 
-   // interact_with_qianwen::llm_trans_with_qianwen();
+    //interact_with_qianwen::llm_trans_with_qianwen();
     let buf = PathBuf::from(opts.path);
     let conf = PathBuf::from(opts.config);
     let output = PathBuf::from(opts.output);

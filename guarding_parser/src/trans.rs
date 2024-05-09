@@ -46,7 +46,7 @@ fn Vec_assert_to_string(assert: &RuleAssert, opr: String, scope: &RuleScope) -> 
                 let mut attribute = vec_assert_attribute_to_string(attr);
                 //app内容是.arePublic().should().等
                 for (i, app) in attribute.iter().enumerate() {
-                    // 检查app是否以"are"开头
+                    /*// 检查app是否以"are"开头
                     if let Some(app_slice) = app.strip_prefix("are") {
                         // 如果是以"are"开头，则替换为"be"
                         let modified_app = format!("be{}", app_slice);
@@ -54,12 +54,15 @@ fn Vec_assert_to_string(assert: &RuleAssert, opr: String, scope: &RuleScope) -> 
                     } else {
                         // 如果不是以"are"开头，则直接追加原字符串
                         result.push_str(app);
-                    }
+                    }*/
 
-                if(opr.starts_with("not")){
+                    result.push_str(app);
+
+                    /**非not operator 省去追加的多个not~operaror~ruleLevel~.
+                    if(opr.starts_with("not")){
                     result.push_str(&*opr);
-                }
-                    //result.push_str(&*opr);
+                }*/
+                    result.push_str(&*opr);
                 }
 
                 /**
@@ -80,6 +83,13 @@ fn Vec_assert_to_string(assert: &RuleAssert, opr: String, scope: &RuleScope) -> 
                     }
                     _ => {}
                 }
+
+                /**
+                //在末尾resideIn插入之前要先检查末尾是不是implementclases等
+                let opr_length = opr.len();
+                if(result.ends_with(&*opr)){
+                    result.truncate(result.len() -opr_length );
+                }*/
                 result.push_str(&*scp.to_string())
             }
             _ => {}
