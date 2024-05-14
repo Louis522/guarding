@@ -109,6 +109,8 @@ fn parse_rule_level(pair: Pair<Rule>) -> RuleLevel {
         "function" => { RuleLevel::Function }
         "class" => { RuleLevel::Class }
         "struct" => { RuleLevel::Struct }
+        "method" => { RuleLevel::Method }
+        "parameter" => { RuleLevel::Parameter }
         &_ => { unreachable!("error rule level: {:?}", level_str) }
     }
 }
@@ -172,6 +174,7 @@ fn parse_operator(parent: Pair<Rule>) -> Vec<Operator> {
         Rule::op_extendBy => { Operator::ExtendBy }
         Rule::op_implement => { Operator::Implement }
         Rule::op_freeOfCircle => { Operator::FreeOfCircle }
+        Rule::op_embed => { Operator::Embed }
 
         Rule::op_BePublic => { Operator::BePublic }
         Rule::op_BePrivate => { Operator::BePrivate }

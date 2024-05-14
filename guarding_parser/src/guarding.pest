@@ -20,7 +20,9 @@ rule_level = {
     "class" |
     "struct" |
     "function" |
-    "file"
+    "file" |
+    "method" |
+    "parameter"
 }
 
 layer_rule = {
@@ -158,6 +160,7 @@ operator = {
 	op_implement |
 	op_extendBy |
 	op_freeOfCircle |
+	op_embed |
 
 
 
@@ -187,6 +190,7 @@ op_dependBy	      = { "dependBy" }
 op_extendBy       = { "extendBy" }
 op_implement      = { "implement"}
 op_freeOfCircle      = { "freeOfCircle"}
+op_embed          = { "embed" }
 
 
 op_not            = @{ "not" }

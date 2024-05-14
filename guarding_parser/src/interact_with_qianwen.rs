@@ -90,7 +90,7 @@ async fn call_api_and_write_to_file(api_key: &str, pre_command_text: &str,input_
 /**
  Todo:写一个异步函数更加合理,当guarding.rs写完api.json后,interractWithqianwen会继续执行在末尾行加//的操作
  */
-//大模型输出while循环
+//可能的方法：大模型输出while循环 提升识别准确
 fn extract_code_section(text: &str) -> Option<&str> {
     // 扩充处理逻辑
     Some(text)  //
@@ -128,30 +128,8 @@ pub async fn llm_trans_with_qianwen() {
         eprintln!("Error: {}", e);
     }
 
-
-
-
-
-    /*
-    /**
-     *处理
-     */
-    println!("请输入：");
-    match io::stdin().read_line(&mut input){
-        Ok(_) => {
-            println!("输入的内容是：{}", input.trim());
-        },
-        Err(error) => {
-            eprintln!("读取输入时发生错误: {}", error);
-        }
-    }
-
-    if let Err(e) = call_api_and_write_to_file(api, "Service包里原生的，公共的类不应该被controller包里伴生的类实现", "C:/LSDocument/GitHub/guarding/guarding.guarding",&client).await {
-        eprintln!("Error: {}", e);
-    }*/
 }
-
-#[cfg(test)]
+/*#[cfg(test)]
 mod tests {
     use super::*;
     use tokio;
@@ -160,4 +138,4 @@ mod tests {
     fn test() {
         llm_trans_with_qianwen("Service包里原生的，公共的类不应该被controller包里伴生的类实现");
     }
-}
+*/

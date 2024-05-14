@@ -96,6 +96,8 @@ pub enum RuleLevel {
     Function,
     Class,
     Struct,
+    Parameter,
+    Method,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -191,6 +193,8 @@ pub enum Operator {
     ExtendBy,
     Implement,
     FreeOfCircle,
+    Embed,
+
     BePublic,
     BePrivate,
     BeProtected,

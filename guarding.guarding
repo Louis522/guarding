@@ -28,4 +28,4 @@
 //class[activelynative static] should not implement class[extensive public];
 //                                        bepublic
 //class[static activelynative(packagename "service")] should implement class[extensive public(packagename "controller")]
-class[activelynative static] should BePublic
+method[activelynative] should not embed parameter[extensive]

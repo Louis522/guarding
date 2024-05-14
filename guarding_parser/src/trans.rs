@@ -188,6 +188,8 @@ impl ToString for RuleLevel {
             RuleLevel::Package => "package()".to_string(),
             RuleLevel::Function => "function()".to_string(),
             RuleLevel::Struct => "struct()".to_string(),
+            RuleLevel::Method => "methods()".to_string(),
+            RuleLevel::Parameter => "parameters()".to_string(),
             //ToDo ... 对其他级别的转换
         }
     }
@@ -347,6 +349,7 @@ fn vec_operator_to_string(ops: &Vec<Operator>, assert: &RuleAssert) -> String {
                             Operator::ExtendBy => "notBeExtendedBy",
                             Operator::Implement => "notImplement",
                             Operator::FreeOfCircle => "notFreeOfCircle",
+                            Operator::Embed =>"notEmbed",
 
                             Operator::BeAbstract => "notBeAbstract",
                             Operator::BeFinal => "notBeFinal",
@@ -369,6 +372,7 @@ fn vec_operator_to_string(ops: &Vec<Operator>, assert: &RuleAssert) -> String {
                 Operator::ExtendBy => "BeExtendedBy",
                 Operator::Implement => "Implement",
                 Operator::FreeOfCircle => "FreeOfCircle",
+                Operator::Embed => "Embed",
 
                 Operator::BeAbstract => "BeAbstract",
                 Operator::BeFinal => "BeFinal",
