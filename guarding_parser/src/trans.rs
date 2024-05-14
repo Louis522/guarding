@@ -34,15 +34,21 @@ impl ToString for GuardRule {
 fn Vec_assert_to_string(assert: &RuleAssert, opr: String, scope: &RuleScope) -> String {
     let mut result = String::new();
     {
-        result.push_str(&*opr);
         match assert {
+            RuleAssert::Empty => {
+                if let Some(app_slice) = opr.strip_suffix("That().") {
+                    // 如果是以"That()."结尾，则替换为"()"
+                    let modified_app = format!("{}()", app_slice);
+                    result.push_str(&modified_app);
+                } else {}
+            }
             /**
             ToDo
              */
-            RuleAssert::Empty => {}
             RuleAssert::Stringed(scp, str) => {}
             RuleAssert::Leveled(lv, scp, package_ident) => {}
             RuleAssert::ArrayStringed(lv, attr, scp) => {
+                result.push_str(&*opr);
                 let mut attribute = vec_assert_attribute_to_string(attr);
                 //app内容是.arePublic().should().等
                 for (i, app) in attribute.iter().enumerate() {
@@ -59,9 +65,9 @@ fn Vec_assert_to_string(assert: &RuleAssert, opr: String, scope: &RuleScope) -> 
                     result.push_str(app);
 
                     /**非not operator 省去追加的多个not~operaror~ruleLevel~.
-                    if(opr.starts_with("not")){
-                    result.push_str(&*opr);
-                }*/
+                                        if(opr.starts_with("not")){
+                                        result.push_str(&*opr);
+                                    }*/
                     result.push_str(&*opr);
                 }
 
@@ -74,10 +80,10 @@ fn Vec_assert_to_string(assert: &RuleAssert, opr: String, scope: &RuleScope) -> 
                         //由于rust特性,无法对string使用pop
                         // 计算opr的长度并从result的末尾移除相应长度的字符串加上.should().一并移除
                         let opr_length = opr.len();
-                        if(opr.starts_with("not")){
+                        if (opr.starts_with("not")) {
                             //只去掉.should().
                             result.truncate(result.len() - (opr_length + 13));
-                        }else{
+                        } else {
                             result.truncate(result.len() - 13);
                         }
                     }
@@ -319,8 +325,8 @@ fn path_join(path: &Vec<String>) -> String {
 }
 
 /**
- *预期notBeExtendedByClassesThat().
-  或者BeExtendedByClassesThat().
+*预期notBeExtendedByClassesThat().
+ 或者BeExtendedByClassesThat().
  */
 fn vec_operator_to_string(ops: &Vec<Operator>, assert: &RuleAssert) -> String {
     //println!("{}",ops.len());
@@ -341,6 +347,16 @@ fn vec_operator_to_string(ops: &Vec<Operator>, assert: &RuleAssert) -> String {
                             Operator::ExtendBy => "notBeExtendedBy",
                             Operator::Implement => "notImplement",
                             Operator::FreeOfCircle => "notFreeOfCircle",
+
+                            Operator::BeAbstract => "notBeAbstract",
+                            Operator::BeFinal => "notBeFinal",
+                            Operator::BeStatic => "notBeStatic",
+                            Operator::BePublic => "notBePublic",
+                            Operator::BePrivate => "notBePrivate",
+                            Operator::BeProtected => "notBeProtected",
+                            Operator::BeActivelyNative => "notBeActivelyNative",
+                            Operator::BeExtensive => "notBeExtensive",
+                            Operator::BeIntrusivelyNative => "notBeIntrusivelyNative",
                             _ => &"not something",
                         }
                     } else {
@@ -353,6 +369,16 @@ fn vec_operator_to_string(ops: &Vec<Operator>, assert: &RuleAssert) -> String {
                 Operator::ExtendBy => "BeExtendedBy",
                 Operator::Implement => "Implement",
                 Operator::FreeOfCircle => "FreeOfCircle",
+
+                Operator::BeAbstract => "BeAbstract",
+                Operator::BeFinal => "BeFinal",
+                Operator::BeStatic => "BeStatic",
+                Operator::BePublic => "BePublic",
+                Operator::BePrivate => "BePrivate",
+                Operator::BeProtected => "BeProtected",
+                Operator::BeActivelyNative => "BeActivelyNative",
+                Operator::BeExtensive => "BeExtensive",
+                Operator::BeIntrusivelyNative => "BeIntrusivelyNative",
                 _ => "op.to_string().as_str()",
             }
                             /* *
@@ -387,7 +413,6 @@ impl ToString for RuleAssert {
                 format!("{}That().{}{}", str1, str2, RuleScope.to_string())
                  */
                 format!("{}", str1)
-
             }
             //             str1           str2                             RoleScope.to_string()
             //notImplement Classes That().areActivelyNative(). andShould().resideInAPackage(controller)

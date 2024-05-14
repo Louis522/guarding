@@ -27,4 +27,5 @@
 //class[static activelynative(packagename "service")] should not implement class[extensive public(packagename "controller")]
 //class[activelynative static] should not implement class[extensive public];
 //                                        bepublic
-class[static activelynative(packagename "service")] should implement class[extensive public(packagename "controller")]
+//class[static activelynative(packagename "service")] should implement class[extensive public(packagename "controller")]
+class[activelynative static] should BePublic

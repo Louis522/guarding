@@ -190,7 +190,16 @@ pub enum Operator {
     Extend,
     ExtendBy,
     Implement,
-    FreeOfCircle
+    FreeOfCircle,
+    BePublic,
+    BePrivate,
+    BeProtected,
+    BeStatic,
+    BeFinal,
+    BeAbstract,
+    BeActivelyNative,
+    BeExtensive,
+    BeIntrusivelyNative
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]

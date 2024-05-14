@@ -12,14 +12,8 @@ declaration = {
 // file is a container of classes and functions
 // classes is a container of functions and field
 normal_rule = {
-	rule_level ~ "["~attribute~("(" ~ scope ~ ")")?~"]" ~ (use_symbol ~ expression)? ~ should? ~ only? ~ operator ~ assert ~ ";"?
+	rule_level ~ "["~attribute~("(" ~ scope ~ ")")?~"]" ~ (use_symbol ~ expression)? ~ should? ~ only? ~ operator ~ assert? ~ ";"?
 }
-
-/*
-arch_rule = {
-    rule_level ~ ("(" ~ scope ~ ")")? ~ (use_symbol ~ expression)? ~ should? ~ only? ~ operator ~[("(" ~ scope ~ ")")?  ~ should? ~ status] ~ ";"?
-}
-*/
 
 rule_level = {
     "package" |
@@ -163,8 +157,19 @@ operator = {
 //	op_extend  |
 	op_implement |
 	op_extendBy |
-	op_freeOfCircle
+	op_freeOfCircle |
 
+
+
+	op_BePublic  |
+	op_BePrivate |
+	op_BeProtected |
+	op_BeStatic |
+	op_BeFinal |
+	op_BeAbstract |
+	op_BeActivelyNative |
+	op_BeExtensive |
+	op_BeIntrusivelyNative
 }
 
 // todo: change to strings operations method
@@ -194,6 +199,17 @@ op_lt             = { "<" }
 op_gt             = { ">" }
 op_eq             = { "=" }
 op_ineq           = { "!=" }
+
+//Dont need assert :   class[public ] should BeActivelyNative
+op_BePublic        = { "BePublic" }
+op_BePrivate        = { "BePrivate" }
+op_BeProtected     = { "BeProtected" }
+op_BeStatic        = { "BeStatic" }
+op_BeFinal         = { "BeFinal" }
+op_BeAbstract      = { "BeAbstract" }
+op_BeActivelyNative = { "BeActivelyNative" }
+op_BeExtensive     = { "BeExtensive" }
+op_BeIntrusivelyNative = { "BeIntrusivelyNative" }
 
 should            = { "should" }
 only              = { "only" }

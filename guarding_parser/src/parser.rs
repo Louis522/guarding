@@ -172,6 +172,16 @@ fn parse_operator(parent: Pair<Rule>) -> Vec<Operator> {
         Rule::op_extendBy => { Operator::ExtendBy }
         Rule::op_implement => { Operator::Implement }
         Rule::op_freeOfCircle => { Operator::FreeOfCircle }
+
+        Rule::op_BePublic => { Operator::BePublic }
+        Rule::op_BePrivate => { Operator::BePrivate }
+        Rule::op_BeProtected => { Operator::BeProtected }
+        Rule::op_BeAbstract => { Operator::BeAbstract }
+        Rule::op_BeActivelyNative => { Operator::BeActivelyNative }
+        Rule::op_BeStatic => { Operator::BeStatic }
+        Rule::op_BeFinal => { Operator::BeFinal }
+        Rule::op_BeExtensive => { Operator::BeExtensive }
+        Rule::op_BeIntrusivelyNative => { Operator::BeIntrusivelyNative }
         _ => {
             panic!("implementing ops: {:?}, text: {:?}", pair.as_rule(), pair.as_span())
         }
