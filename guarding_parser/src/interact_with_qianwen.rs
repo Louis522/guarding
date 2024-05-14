@@ -1,9 +1,18 @@
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
+use toml::de;
 use std::fs::OpenOptions;
 use std::{fs, io};
 use std::io::Write;
 use tokio;
+
+//配置
+#[derive(Debug, Deserialize, Serialize)]
+struct AppConfig {
+    api_key: String,
+    pre_command_file_path: String,
+    guarding_file_path: String
+}
 
 #[derive(Serialize)]
 struct ApiRequest {
@@ -37,6 +46,11 @@ struct ApiResponse {
 struct Output {
     text: String,
     finish_reason: String,
+}
+
+fn load_config(file_path: &str) -> Result<AppConfig, Box<dyn std::error::Error>> {
+    let contents = fs::read_to_string(file_path)?;
+    Ok(de::from_str(&contents)?)
 }
 
 async fn call_api_and_write_to_file(api_key: &str, pre_command_text: &str,input_text:&str, file_path: &str,client: &Client) -> Result<(), Box<dyn std::error::Error>> {
@@ -84,12 +98,11 @@ fn extract_code_section(text: &str) -> Option<&str> {
 
 #[tokio::main]
 pub async fn llm_trans_with_qianwen() {
-    /**
-    *输入apikey  https://help.aliyun.com/zh/dashscope/developer-reference/activate-dashscope-and-create-an-api-key
-    */
-    let  api= "sk-";
+
+    let config = load_config("config.toml").expect("Failed to load config");
+    let  api= config.api_key;
     let mut input = String::new();
-    let pre_command_file_path = "C:/LSDocument/GitHub/guarding/preCommand.txt";
+    let pre_command_file_path = config.pre_command_file_path;
     let  client = Client::new();
 
     /**
@@ -111,7 +124,7 @@ pub async fn llm_trans_with_qianwen() {
             eprintln!("读取输入时发生错误: {}", error);
         }
     }
-    if let Err(e) = call_api_and_write_to_file(api, pre_command.as_str(),input.trim(), "C:/LSDocument/GitHub/guarding/guarding.guarding",&client).await {
+    if let Err(e) = call_api_and_write_to_file(&*api, pre_command.as_str(), input.trim(), config.guarding_file_path.as_str(), &client).await {
         eprintln!("Error: {}", e);
     }
 

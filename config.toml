@@ -1,0 +1,7 @@
+[app]
+api_key = "sk-user-provided-value"
+pre_command_file_path = "C:/LSDocument/GitHub/guarding/preCommand.txt"
+guarding_file_path = "C:/LSDocument/GitHub/guarding/guarding.guarding"
+#输入apikey  https://help.aliyun.com/zh/dashscope/developer-reference/activate-dashscope-and-create-an-api-key
+#pre_command_file_path =/home/guarding/preCommand.txt"
+#guarding_file_path = "/home/guarding/guarding.guarding"

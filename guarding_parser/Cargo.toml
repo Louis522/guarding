@@ -29,6 +29,7 @@ pest_derive = "2.1.0"
 # serialize
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1"
+toml = "0.8.12"
 heck = "0.5.0"
 reqwest = { version = "0.12.3", features = ["blocking","json"] }
 blocking = "1.5.1"
