@@ -2,7 +2,7 @@ use pest::iterators::{Pair, Pairs};
 use pest::Parser;
 
 use crate::errors::{Error, Result as GuardingResult};
-use crate::ast::{Expr, GuardRule, Operator,Attribute, RuleAssert, RuleLevel, RuleScope};
+use crate::ast::{Expr, GuardRule, Operator, Attribute, RuleAssert, RuleLevel, RuleScope};
 use crate::parser::Rule::scope;
 use crate::support::str_support;
 
@@ -114,26 +114,29 @@ fn parse_rule_level(pair: Pair<Rule>) -> RuleLevel {
         &_ => { unreachable!("error rule level: {:?}", level_str) }
     }
 }
+
 fn parse_attr(parent: Pair<Rule>) -> Vec<Attribute> {
     let mut pairs = parent.into_inner();
     //let mut pair = pairs.next().unwrap();
     //Todo add SomeThing
     let mut attributes: Vec<Attribute> = vec![];
     for pair in pairs {
-       // pair = p.into_inner().next().unwrap();
+        // pair = p.into_inner().next().unwrap();
         let attribute = match pair.as_str() {
-        "public" => { Attribute::Public }
-        "private" => { Attribute::Private }
-        "protected" => { Attribute::Protected }
-        "static" => { Attribute::Static }
-        "final" => { Attribute::Final }
-        "abstract" => { Attribute::Abstract }
-        "activelynative" => { Attribute::ActivelyNative }
-        "extensive" => { Attribute::Extensive }
-        _ => {
-            panic!("implementing ops: {:?}, text: {:?}", pair.as_rule(), pair.as_span())
-        }
-    };
+            "public" => { Attribute::Public }
+            "private" => { Attribute::Private }
+            "protected" => { Attribute::Protected }
+            "static" => { Attribute::Static }
+            "final" => { Attribute::Final }
+            "abstract" => { Attribute::Abstract }
+            "activelynative" => { Attribute::ActivelyNative }
+            "intrusivelynative" => { Attribute::IntrusivelyNative }
+            "extensive" => { Attribute::Extensive }
+
+            _ => {
+                panic!("implementing ops: {:?}, text: {:?}", pair.as_rule(), pair.as_span())
+            }
+        };
         attributes.push(attribute)
     }
     attributes
@@ -246,7 +249,7 @@ fn parse_assert(parent: Pair<Rule>) -> RuleAssert {
                 }
             }
 
-            RuleAssert::Leveled(level,scp, str)
+            RuleAssert::Leveled(level, scp, str)
         }
         Rule::sized => {
             let mut pairs = pair.into_inner();
@@ -267,7 +270,7 @@ fn parse_assert(parent: Pair<Rule>) -> RuleAssert {
             let pair2 = pairs.next().unwrap();
             let str = str_support::replace_string_markers(pair2.as_str());
 
-            RuleAssert::Stringed(scp,str.to_string())
+            RuleAssert::Stringed(scp, str.to_string())
         }
         Rule::array_stringed => {
             //let mut array = vec![];
@@ -281,7 +284,8 @@ fn parse_assert(parent: Pair<Rule>) -> RuleAssert {
                     }
 
                     Rule::attribute => {
-                        attributes = parse_attr(p);;
+                        attributes = parse_attr(p);
+                        ;
                     }
                     Rule::scope => {
                         scp = parse_scope(p);
@@ -290,7 +294,7 @@ fn parse_assert(parent: Pair<Rule>) -> RuleAssert {
                 }
             }
 
-            RuleAssert::ArrayStringed(level,attributes,scp)
+            RuleAssert::ArrayStringed(level, attributes, scp)
         }
         _ => { RuleAssert::Empty }
     }
@@ -342,13 +346,13 @@ fn parse_scope(parent: Pair<Rule>) -> RuleScope {
 }
 
 fn string_from_pair(pair: Pair<Rule>) -> Vec<String> {
-   // let mut string = "".to_string();
-    let mut result=vec![];
+    // let mut string = "".to_string();
+    let mut result = vec![];
     for p in pair.into_inner() {
         match p.as_rule() {
             Rule::extent => {
                 for inner in p.into_inner() {
-                    match inner.as_rule(){
+                    match inner.as_rule() {
                         Rule::string => {
                             let without_markers = str_support::replace_string_markers(inner.as_str());
                             let string = str_support::unescape(without_markers.as_str()).expect("incorrect string literal");
@@ -358,7 +362,7 @@ fn string_from_pair(pair: Pair<Rule>) -> Vec<String> {
                     }
                 }
             }
-            Rule::string=>{
+            Rule::string => {
                 let without_markers = str_support::replace_string_markers(p.as_str());
                 let string = str_support::unescape(without_markers.as_str()).expect("incorrect string literal");
                 result.push(string);
@@ -382,7 +386,7 @@ mod tests {
         assert_eq!(1, rules.len());
         assert_eq!(RuleLevel::Class, rules[0].level);
         assert_eq!(RuleScope::All, rules[0].scope);
-       // assert_eq!(RuleAssert::Stringed("Controller".to_string()), rules[0].assert);
+        // assert_eq!(RuleAssert::Stringed("Controller".to_string()), rules[0].assert);
     }
 
     #[test]
@@ -391,7 +395,7 @@ mod tests {
         let rules = parse(code).unwrap();
 
         assert_eq!(RuleLevel::Struct, rules[0].level);
-      //  assert_eq!(RuleAssert::Stringed("Controller".to_string()), rules[0].assert);
+        //  assert_eq!(RuleAssert::Stringed("Controller".to_string()), rules[0].assert);
     }
 
     #[test]
@@ -433,7 +437,7 @@ mod tests {
     fn should_parse_package_container_scope() {
         let code = "class(assignable \"EntityManager.class\") resideIn package(\"..persistence.\");";
         let vec = parse(code).unwrap();
-       // assert_eq!(RuleAssert::Leveled(RuleLevel::Package, "..persistence.".to_string()), vec[0].assert);
+        // assert_eq!(RuleAssert::Leveled(RuleLevel::Package, "..persistence.".to_string()), vec[0].assert);
     }
 
     #[test]
@@ -449,7 +453,7 @@ mod tests {
         let vec = parse(code).unwrap();
 
         let results = vec!["..controller..".to_string(), "..service..".to_string()];
-      //  assert_eq!(RuleAssert::ArrayStringed(results), vec[0].assert);
+        //  assert_eq!(RuleAssert::ArrayStringed(results), vec[0].assert);
     }
 
     #[test]

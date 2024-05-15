@@ -212,6 +212,7 @@ fn vec_attribute_to_string(attr: &Vec<Attribute>, scope: &RuleScope) -> String {
                 Attribute::Abstract => "areAbstract().and().",
                 Attribute::ActivelyNative => "areActivelyNative().and().",
                 Attribute::Extensive => "areExtensive().and().",
+                Attribute::IntrusivelyNative => "areIntrusivelyNative().and().",
                 _ => "op.to_string().as_str()",
             })
         } else {

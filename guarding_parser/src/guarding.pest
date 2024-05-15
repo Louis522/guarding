@@ -53,7 +53,8 @@ attrib = {
     "final" |
     "abstract"|
     "activelynative"|
-    "extensive"
+    "extensive" |
+    "intrusivelynative"
 }
 
 

@@ -155,6 +155,7 @@ pub enum Attribute {
     Abstract,
     ActivelyNative,
     Extensive,
+    IntrusivelyNative,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
