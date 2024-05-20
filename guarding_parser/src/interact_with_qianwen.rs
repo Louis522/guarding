@@ -124,7 +124,7 @@ pub async fn llm_trans_with_qianwen() {
             eprintln!("读取输入时发生错误: {}", error);
         }
     }
-    if let Err(e) = call_api_and_write_to_file(&*api, pre_command.as_str(), input.trim(), config.guarding_file_path.as_str(), &client).await {
+    if let Err(e) = call_api_and_write_to_file(&*api, pre_command.as_str(), input.trim(), &*config.guarding_file_path, &client).await {
         eprintln!("Error: {}", e);
     }
 

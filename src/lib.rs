@@ -16,7 +16,6 @@ pub fn exec_guarding(rule_content: String, code_dir: PathBuf, output: PathBuf) -
     /*使用guarding parser模块提供的parse方法解析rule_content变量的内容，然后针对解析结果进行模式匹配处理
       主要关注的部分
      */
-
     match parser::parse(rule_content.as_str()) {
         Err(e) => {
             println!("{}", e);

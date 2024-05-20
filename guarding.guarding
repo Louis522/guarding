@@ -28,4 +28,10 @@
 //class[activelynative static] should not implement class[extensive public];
 //                                        bepublic
 //class[static activelynative(packagename "service")] should implement class[extensive public(packagename "controller")]
-method[activelynative] should not embed parameter[extensive]
+//method[activelynative] should not embed parameter[extensive]method().that().areActivelyNative().should().notEmbedParametersThat().areExtensive();
+//method[activelynative] should not embed parameter[extensive]class[activelynative(packageName "service")] should not implement class[extensive(packageName "controller")]
+//methods().that().areActivelyNative().should().notEmbedParametersThat().areExtensive();
+//class[activelynative(packagename "controller")] should not implement class[extensive(packagename "service")]//method[activelynative] should not embed parameter[extensive]
+//methods().that().areActivelyNative().should().embedParametersThat().areExtensive();
+//methods().that().areActivelyNative().should().embedParametersThat().areExtensive();
+method[activelynative] should not implement parameter[extensive static private];

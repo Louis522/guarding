@@ -117,7 +117,7 @@ only              = { "only" }
 <伴生的,公共的,静态的类不会被原生的,公共的类实现， rule_level ~ “[”~attribute~(“(” ~ scope ~ “)”)?~“]” ~ should? ~ only? ~ operator ~ assert? ~ “;”?，class[extensive public static] should not implement class[activelynative public]>
 <伴生的,公共的,静态的类可以被原生的,公共的类实现， rule_level ~ “[”~attribute~(“(” ~ scope ~ “)”)?~“]” ~ should? ~ only? ~ operator ~ assert? ~ “;”?，class[extensive public static] should implement class[activelynative public]>
 <原生的,公共的类可以被原生的,静态的类实现， rule_level ~ “[”~attribute~(“(” ~ scope ~ “)”)?~“]” ~ should? ~ only? ~ operator ~ assert? ~ “;”?，class[activilynative public] should implement class[extensive static]>
-<原生的方法不能嵌入伴生的参数， rule_level ~ “[”~attribute~(“(” ~ scope ~ “)”)?~“]” ~ should? ~ only? ~ operator ~ assert? ~ “;”?，methods().that().areActivelyNative().should().notEmbedParametersThat().areExtensive()>
-<原生的方法应该嵌入伴生的参数， rule_level ~ “[”~attribute~(“(” ~ scope ~ “)”)?~“]” ~ should? ~ only? ~ operator ~ assert? ~ “;”?，methods().that().areActivelyNative().should().EmbedParametersThat().areExtensive()>
+<原生的方法不能嵌入伴生的参数， rule_level ~ “[”~attribute~(“(” ~ scope ~ “)”)?~“]” ~ should? ~ only? ~ operator ~ assert? ~ “;”?，method[activelynative] should not embed parameter[extensive]>
+<原生的方法应该嵌入伴生的参数， rule_level ~ “[”~attribute~(“(” ~ scope ~ “)”)?~“]” ~ should? ~ only? ~ operator ~ assert? ~ “;”?，method[activelynative] should embed parameter[extensive]>
 
 
