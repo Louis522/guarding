@@ -2,7 +2,7 @@ use pest::iterators::{Pair, Pairs};
 use pest::Parser;
 
 use crate::errors::{Error, Result as GuardingResult};
-use crate::ast::{Expr, GuardRule, Operator, Attribute, RuleAssert, RuleLevel, RuleScope};
+use crate::ast::{Expr, GuardRule, Operator, Attribute, RuleAssert, RuleLevel, RuleScope, RulePriority};
 use crate::parser::Rule::scope;
 use crate::support::str_support;
 
@@ -86,6 +86,9 @@ fn parse_normal_rule(pair: Pair<Rule>) -> GuardRule {
             }
             Rule::scope => {
                 guard_rule.scope = parse_scope(p);
+            }
+            Rule::priority => {
+                guard_rule.priority = parse_priority(p);
             }
             Rule::should => {
                 // should do nothing
@@ -349,6 +352,17 @@ fn parse_scope(parent: Pair<Rule>) -> RuleScope {
             println!("implementing scope: {:?}, text: {:?}", pair.as_rule(), pair.as_span());
             RuleScope::All
         }
+    }
+}
+
+fn parse_priority(pair: Pair<Rule>) -> RulePriority {
+    let level_str = pair.as_span().as_str();
+    match level_str {
+        "" => { RulePriority::Default }
+        "HIGH" => { RulePriority::High }
+        "MEDIUM" => { RulePriority::Medium }
+        "LOW" => { RulePriority::Low }
+        &_ => { unreachable!("error rule level: {:?}", level_str) }
     }
 }
 

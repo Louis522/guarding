@@ -38,4 +38,4 @@
 //method[activelynative] should not embed codeBlock[extensive local]
 interface[extensive] should not dependBy entity[activelynative]
 object[extensive] should not dependBy entity[activelynative]
-class[extensive interface] should not dependBy entity[activelynative]
+class[extensive interface] should not dependBy entity[activelynative] (HIGH)

@@ -12,7 +12,7 @@ declaration = {
 // file is a container of classes and functions
 // classes is a container of functions and field
 normal_rule = {
-	rule_level ~ "["~attribute~("(" ~ scope ~ ")")?~"]" ~ (use_symbol ~ expression)? ~ should? ~ only? ~ operator ~ assert? ~ ";"?
+	rule_level ~ "["~attribute~("(" ~ scope ~ ")")?~"]" ~ (use_symbol ~ expression)? ~ should? ~ only? ~ operator ~ assert? ~ "("? ~priority?~ ")"?~ ";"?
 }
 
 rule_level = {
@@ -183,6 +183,11 @@ operator = {
 	op_BeIntrusivelyNative
 }
 
+priority = {
+   "HIGH" |
+   "MEDIUM" |
+   "LOW"
+}
 // todo: change to strings operations method
 op_contains	      = { "contains" }
 op_endsWith	      = { "endsWith" }

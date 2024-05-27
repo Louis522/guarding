@@ -10,6 +10,7 @@ pub struct GuardRule {
     pub expr: Expr,
     pub ops: Vec<Operator>,
     pub assert: RuleAssert,
+    pub priority:RulePriority
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -36,6 +37,7 @@ impl Default for GuardRule {
             expr: Expr::Identifier("".to_string()),
             ops: vec![],
             assert: RuleAssert::Empty,
+            priority:RulePriority::Default,
         }
     }
 }
@@ -219,4 +221,12 @@ pub enum RuleAssert {
     Leveled(RuleLevel, RuleScope, String),
     ArrayStringed(RuleLevel, Vec<Attribute>, RuleScope),
     Sized(usize),
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum RulePriority {
+    Low,
+    Medium,
+    High,
+    Default
 }

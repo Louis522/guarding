@@ -7,12 +7,13 @@ extern crate regex;
 use regex::Regex;
 use heck::ToTitleCase;
 use std::fmt::{Display, Formatter, Result};
-use crate::ast::{Expr, GuardRule, Operator, RuleAssert, Attribute, RuleLevel, RuleType, RuleScope};
+use crate::ast::{Expr, GuardRule, Operator, RuleAssert, Attribute, RuleLevel, RuleType, RuleScope, RulePriority};
 
 impl ToString for GuardRule {
     fn to_string(&self) -> String {
         let Opr = vec_operator_to_string(&self.ops, &self.assert);
-        let mut result = format!("{}.that().{}{}.should().{}",
+        let mut result = format!("{}{}.that().{}{}.should().{}",
+                                 self.priority.to_string(),
                                  self.level.to_string(),
                                  vec_attribute_to_string(&self.attr, &self.scope),
                                  //that
@@ -65,9 +66,9 @@ fn Vec_assert_to_string(assert: &RuleAssert, opr: String, scope: &RuleScope) -> 
                     result.push_str(app);
 
                     /**非not operator 省去追加的多个not~operaror~ruleLevel~.
-                                        if(opr.starts_with("not")){
-                                        result.push_str(&*opr);
-                                    }*/
+                                                            if(opr.starts_with("not")){
+                                                            result.push_str(&*opr);
+                                                        }*/
                     result.push_str(&*opr);
                 }
 
@@ -180,7 +181,16 @@ andShould().notImplementClassesThat().resideInAPackage(controller) //
 }
  */
 
-
+impl ToString for RulePriority{
+    fn to_string(&self) -> String {
+        match self {
+            RulePriority::High => "ArchRuleDefinition.priority(Priority.HIGH).".to_string(),
+            RulePriority::Medium => "ArchRuleDefinition.priority(Priority.MEDIUM)".to_string(),
+            RulePriority::Low => "ArchRuleDefinition.priority(Priority.LOW)".to_string(),
+            RulePriority::Default => "ArchRuleDefinition.".to_string(),
+        }
+    }
+}
 impl ToString for RuleLevel {
     fn to_string(&self) -> String {
         match self {
@@ -360,7 +370,7 @@ fn vec_operator_to_string(ops: &Vec<Operator>, assert: &RuleAssert) -> String {
                             Operator::ExtendBy => "notBeExtendedBy",
                             Operator::Implement => "notImplement",
                             Operator::FreeOfCircle => "notFreeOfCircle",
-                            Operator::Embed =>"notEmbed",
+                            Operator::Embed => "notEmbed",
 
                             Operator::BeAbstract => "notBeAbstract",
                             Operator::BeFinal => "notBeFinal",
