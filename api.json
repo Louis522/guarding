@@ -1,6 +1,7 @@
 {
   "result": [
     "interfaces().that().areExtensive().should().notBeDependByEntitiesThat().areActivelyNative()",
-    "objects().that().areExtensive().should().notBeDependByEntitiesThat().areActivelyNative()"
+    "objects().that().areExtensive().should().notBeDependByEntitiesThat().areActivelyNative()",
+    "classes().that().areExtensive().and().areInterfaces().should().notBeDependByEntitiesThat().areActivelyNative()"
   ]
 }

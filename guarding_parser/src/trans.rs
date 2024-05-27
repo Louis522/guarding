@@ -220,6 +220,7 @@ fn vec_attribute_to_string(attr: &Vec<Attribute>, scope: &RuleScope) -> String {
                 Attribute::Extensive => "areExtensive().and().",
                 Attribute::IntrusivelyNative => "areIntrusivelyNative().and().",
                 Attribute::Local => "areLocal().and().",
+                Attribute::Interface => "areInterfaces().and().",
                 _ => "op.to_string().as_str()",
             })
         } else {
@@ -256,6 +257,7 @@ fn vec_assert_attribute_to_string(attr: &Vec<Attribute>) -> Vec<String> {
                 Attribute::ActivelyNative => "areActivelyNative().andShould().",
                 Attribute::Extensive => "areExtensive().andShould().",
                 Attribute::Local => "areLocal().andShould().",
+                Attribute::Interface => "areInterfaces().andShould().",
                 _ => "op.to_string().as_str()",
             }.to_string())
         } else {

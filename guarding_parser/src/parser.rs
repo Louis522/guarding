@@ -139,7 +139,7 @@ fn parse_attr(parent: Pair<Rule>) -> Vec<Attribute> {
             "intrusivelynative" => { Attribute::IntrusivelyNative }
             "extensive" => { Attribute::Extensive }
             "local" => { Attribute::Local }
-
+            "interface" => { Attribute::Interface }
             _ => {
                 panic!("implementing ops: {:?}, text: {:?}", pair.as_rule(), pair.as_span())
             }

@@ -60,7 +60,8 @@ attrib = {
     "activelynative"|
     "extensive" |
     "intrusivelynative" |
-    "local"
+    "local" |
+    "interface"
 }
 
 
