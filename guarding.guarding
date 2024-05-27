@@ -36,5 +36,5 @@
 //methods().that().areActivelyNative().should().embedParametersThat().areExtensive();
 //method[activelynative] should not implement parameter[extensive static private];
 //method[activelynative] should not embed codeBlock[extensive local]
-//interface[extensive] should not dependBy entity[activelynative]
+interface[extensive] should not dependBy entity[activelynative]
 object[extensive] should not dependBy entity[activelynative]

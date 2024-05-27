@@ -20,22 +20,23 @@ pub fn exec_guarding(rule_content: String, code_dir: PathBuf, output: PathBuf) -
         Err(e) => {
             println!("{}", e);
             vec![]
-        },
+        }
 
         Ok(rules) => {
+            let mut result_string = vec![];
             for rule in rules {
-                let result_string = rule.to_string();
-                println!("{}", result_string);
-                //result String写到json文件里
-                let json_value = json!({ "result": result_string });
-                let json_string = serde_json::to_string_pretty(&json_value).unwrap();
-                match File::create(&output) {
-                    Ok(mut file) => match file.write_all(json_string.as_bytes()) {
-                        Ok(_) => println!("Successfully wrote to {}", output.display()),
-                        Err(e) => eprintln!("Error writing to file: {}", e),
-                    },
-                    Err(e) => eprintln!("Error creating file: {}", e),
-                }
+                result_string.push(rule.to_string());
+            }
+            println!("{:?}", result_string);
+            //result String写到json文件里
+            let json_value = json!({ "result": result_string });
+            let json_string = serde_json::to_string_pretty(&json_value).unwrap();
+            match File::create(&output) {
+                Ok(mut file) => match file.write_all(json_string.as_bytes()) {
+                    Ok(_) => println!("Successfully wrote to {}", output.display()),
+                    Err(e) => eprintln!("Error writing to file: {}", e),
+                },
+                Err(e) => eprintln!("Error creating file: {}", e),
             }
             vec![]
             // let models = ModelBuilder::build_models_by_dir(code_dir);
