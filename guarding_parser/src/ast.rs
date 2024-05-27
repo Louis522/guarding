@@ -4,29 +4,25 @@ use std::collections::HashMap;
 pub struct GuardRule {
     pub origin: String,
     pub ty: RuleType,
-    pub attr:Vec<Attribute>,
+    pub attr: Vec<Attribute>,
     pub level: RuleLevel,
     pub scope: RuleScope,
     pub expr: Expr,
     pub ops: Vec<Operator>,
-    pub assert: RuleAssert
+    pub assert: RuleAssert,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum LayeredRule {
     Normal(NormalLayered),
-    Onion(OnionArch)
+    Onion(OnionArch),
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub struct NormalLayered {
-
-}
+pub struct NormalLayered {}
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub struct OnionArch {
-
-}
+pub struct OnionArch {}
 
 
 impl Default for GuardRule {
@@ -34,12 +30,12 @@ impl Default for GuardRule {
         GuardRule {
             origin: "".to_string(),
             ty: RuleType::Normal,
-            attr:vec![],
+            attr: vec![],
             level: RuleLevel::Class,
             scope: RuleScope::All,
             expr: Expr::Identifier("".to_string()),
             ops: vec![],
-            assert: RuleAssert::Empty
+            assert: RuleAssert::Empty,
         }
     }
 }
@@ -59,7 +55,7 @@ impl GuardRule {
     pub fn assert_string(rule: &GuardRule) -> String {
         let mut string = "".to_string();
         match &rule.assert {
-            RuleAssert::Stringed(scp,str) => {
+            RuleAssert::Stringed(scp, str) => {
                 string = str.clone();
             }
             _ => {}
@@ -72,7 +68,7 @@ impl GuardRule {
         let mut level = RuleLevel::Package;
         let mut has_capture = false;
         match &rule.assert {
-            RuleAssert::Leveled(lv, scp,package_ident) => {
+            RuleAssert::Leveled(lv, scp, package_ident) => {
                 has_capture = true;
                 level = lv.clone();
                 string = package_ident.clone();
@@ -97,7 +93,13 @@ pub enum RuleLevel {
     Class,
     Struct,
     Parameter,
+    File,
     Method,
+    Entity,
+    Interface,
+    CodeBlock,
+    Object,
+    API,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -116,7 +118,7 @@ pub enum RuleScope {
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Expr {
     PropsCall(Vec<String>),
-    Identifier(String)
+    Identifier(String),
 }
 
 /// A function call, can be a filter or a global function
@@ -132,7 +134,7 @@ impl FunctionCall {
     pub fn new(name: String) -> FunctionCall {
         FunctionCall {
             name,
-            args: Default::default()
+            args: Default::default(),
         }
     }
 }
@@ -141,10 +143,11 @@ impl Default for FunctionCall {
     fn default() -> Self {
         FunctionCall {
             name: "".to_string(),
-            args: Default::default()
+            args: Default::default(),
         }
     }
 }
+
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Attribute {
     Public,
@@ -156,6 +159,7 @@ pub enum Attribute {
     ActivelyNative,
     Extensive,
     IntrusivelyNative,
+    Local
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -204,14 +208,14 @@ pub enum Operator {
     BeAbstract,
     BeActivelyNative,
     BeExtensive,
-    BeIntrusivelyNative
+    BeIntrusivelyNative,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum RuleAssert {
     Empty,
-    Stringed(RuleScope,String),
-    Leveled(RuleLevel,RuleScope,String),
-    ArrayStringed(RuleLevel,Vec<Attribute>,RuleScope),
+    Stringed(RuleScope, String),
+    Leveled(RuleLevel, RuleScope, String),
+    ArrayStringed(RuleLevel, Vec<Attribute>, RuleScope),
     Sized(usize),
 }

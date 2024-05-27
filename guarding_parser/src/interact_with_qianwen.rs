@@ -4,6 +4,7 @@ use toml::de;
 use std::fs::OpenOptions;
 use std::{fs, io};
 use std::io::Write;
+use std::path::PathBuf;
 use tokio;
 
 //配置
@@ -13,6 +14,7 @@ struct AppConfig {
     pre_command_file_path: String,
     guarding_file_path: String
 }
+
 
 #[derive(Serialize)]
 struct ApiRequest {
@@ -48,18 +50,15 @@ struct Output {
     finish_reason: String,
 }
 
-fn load_config(file_path: &str) -> Result<AppConfig, Box<dyn std::error::Error>> {
+fn load_config(file_path:&PathBuf) -> Result<AppConfig, Box<dyn std::error::Error>> {
     let contents = fs::read_to_string(file_path)?;
     Ok(de::from_str(&contents)?)
 }
 
-async fn call_api_and_write_to_file(api_key: &str, pre_command_text: &str,input_text:&str, file_path: &str,client: &Client) -> Result<(), Box<dyn std::error::Error>> {
+async fn call_api_and_write_to_file(api_key: &str, pre_command_text: &str,input_text:&str, file_path: &PathBuf,client: &Client) -> Result<(), Box<dyn std::error::Error>> {
     let api_url = "https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation";
     let request_body = ApiRequest {
-        /**
-        *更好的模型？
-        */
-        model: "qwen-max-longcontext".to_string(),
+        model: "qwen-turbo".to_string(),
         input: InputData {
             messages: vec![
                 Message { role: "system".to_string(), content: "You are a helpful assistant.".to_string() },
@@ -71,7 +70,7 @@ async fn call_api_and_write_to_file(api_key: &str, pre_command_text: &str,input_
             result_format: "text".to_string(),
         },
     };
-
+println!("api_key:{},\n ,\n input_text:{},\n filepath:{}",api_key,input_text,file_path.display());
     let response = client.post(api_url)
         .bearer_auth(api_key)
         .json(&request_body)
@@ -79,7 +78,7 @@ async fn call_api_and_write_to_file(api_key: &str, pre_command_text: &str,input_
         .await?
         .json::<ApiResponse>()
         .await?;
-
+    // println!("Request: {:?}", request_body);
     if let Some(code_section) = extract_code_section(&response.output.text) {
         let mut file = OpenOptions::new().write(true).append(true).open(file_path)?;
         writeln!(file, "{}", code_section)?;
@@ -97,17 +96,14 @@ fn extract_code_section(text: &str) -> Option<&str> {
 }
 
 #[tokio::main]
-pub async fn llm_trans_with_qianwen() {
+pub async fn llm_trans_with_qianwen(Precommand: &PathBuf, config: &PathBuf, output: &PathBuf) {
 
-    let config = load_config("config.toml").expect("Failed to load config");
+    let config = load_config(config).expect("Failed to load config");
     let  api= config.api_key;
     let mut input = String::new();
-    let pre_command_file_path = config.pre_command_file_path;
+    //let pre_command_file_path = config.pre_command_file_path;
+    let pre_command_file_path = Precommand;
     let  client = Client::new();
-
-    /**
-     *预处理
-     */
     let pre_command = match fs::read_to_string(pre_command_file_path) {
         Ok(content) => content.trim().to_string(),  // 去除末尾换行符
         Err(error) => {
@@ -124,7 +120,7 @@ pub async fn llm_trans_with_qianwen() {
             eprintln!("读取输入时发生错误: {}", error);
         }
     }
-    if let Err(e) = call_api_and_write_to_file(&*api, pre_command.as_str(), input.trim(), &*config.guarding_file_path, &client).await {
+    if let Err(e) = call_api_and_write_to_file(&api, pre_command.as_str(), input.trim(), &output, &client).await {
         eprintln!("Error: {}", e);
     }
 

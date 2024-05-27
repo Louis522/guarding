@@ -111,6 +111,12 @@ fn parse_rule_level(pair: Pair<Rule>) -> RuleLevel {
         "struct" => { RuleLevel::Struct }
         "method" => { RuleLevel::Method }
         "parameter" => { RuleLevel::Parameter }
+        "file" => { RuleLevel::File }
+        "codeBlock" => { RuleLevel::CodeBlock }
+        "entity" => { RuleLevel::Entity }
+        "interface" => { RuleLevel::Interface }
+        "object" => { RuleLevel::Object }
+        "API" => { RuleLevel::API }
         &_ => { unreachable!("error rule level: {:?}", level_str) }
     }
 }
@@ -132,6 +138,7 @@ fn parse_attr(parent: Pair<Rule>) -> Vec<Attribute> {
             "activelynative" => { Attribute::ActivelyNative }
             "intrusivelynative" => { Attribute::IntrusivelyNative }
             "extensive" => { Attribute::Extensive }
+            "local" => { Attribute::Local }
 
             _ => {
                 panic!("implementing ops: {:?}, text: {:?}", pair.as_rule(), pair.as_span())

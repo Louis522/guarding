@@ -22,7 +22,12 @@ rule_level = {
     "function" |
     "file" |
     "method" |
-    "parameter"
+    "parameter" |
+    "codeBlock" |
+    "entity" |
+    "interface" |
+    "object" |
+    "API"
 }
 
 layer_rule = {
@@ -54,7 +59,8 @@ attrib = {
     "abstract"|
     "activelynative"|
     "extensive" |
-    "intrusivelynative"
+    "intrusivelynative" |
+    "local"
 }
 
 

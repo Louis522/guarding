@@ -34,4 +34,7 @@
 //class[activelynative(packagename "controller")] should not implement class[extensive(packagename "service")]//method[activelynative] should not embed parameter[extensive]
 //methods().that().areActivelyNative().should().embedParametersThat().areExtensive();
 //methods().that().areActivelyNative().should().embedParametersThat().areExtensive();
-method[activelynative] should not implement parameter[extensive static private];
+//method[activelynative] should not implement parameter[extensive static private];
+//method[activelynative] should not embed codeBlock[extensive local]
+//interface[extensive] should not dependBy entity[activelynative]
+object[extensive] should not dependBy entity[activelynative]

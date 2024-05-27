@@ -66,7 +66,8 @@ impl RuleExecutor {
             }
             RuleLevel::Parameter => {
                 println!("todo");
-            }
+            },
+            _ => todo!()
         };
 
         // todo: 3. run assert

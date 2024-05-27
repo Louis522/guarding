@@ -189,7 +189,13 @@ impl ToString for RuleLevel {
             RuleLevel::Function => "function()".to_string(),
             RuleLevel::Struct => "struct()".to_string(),
             RuleLevel::Method => "methods()".to_string(),
+            RuleLevel::File => "files()".to_string(),
             RuleLevel::Parameter => "parameters()".to_string(),
+            RuleLevel::CodeBlock => "codeblocks()".to_string(),
+            RuleLevel::Entity => "entities()".to_string(),
+            RuleLevel::Interface => "interfaces()".to_string(),
+            RuleLevel::Object => "objects()".to_string(),
+            RuleLevel::API => "methods()".to_string(),
             //ToDo ... 对其他级别的转换
         }
     }
@@ -213,6 +219,7 @@ fn vec_attribute_to_string(attr: &Vec<Attribute>, scope: &RuleScope) -> String {
                 Attribute::ActivelyNative => "areActivelyNative().and().",
                 Attribute::Extensive => "areExtensive().and().",
                 Attribute::IntrusivelyNative => "areIntrusivelyNative().and().",
+                Attribute::Local => "areLocal().and().",
                 _ => "op.to_string().as_str()",
             })
         } else {
@@ -248,6 +255,7 @@ fn vec_assert_attribute_to_string(attr: &Vec<Attribute>) -> Vec<String> {
                 Attribute::Abstract => "areAbstract().andShould().",
                 Attribute::ActivelyNative => "areActivelyNative().andShould().",
                 Attribute::Extensive => "areExtensive().andShould().",
+                Attribute::Local => "areLocal().andShould().",
                 _ => "op.to_string().as_str()",
             }.to_string())
         } else {
