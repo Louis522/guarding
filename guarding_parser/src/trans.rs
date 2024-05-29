@@ -206,6 +206,7 @@ impl ToString for RuleLevel {
             RuleLevel::Interface => "interfaces()".to_string(),
             RuleLevel::Object => "objects()".to_string(),
             RuleLevel::API => "methods()".to_string(),
+            RuleLevel::Variable => "variables()".to_string(),
             //ToDo ... 对其他级别的转换
         }
     }
@@ -239,7 +240,11 @@ fn vec_attribute_to_string(attr: &Vec<Attribute>, scope: &RuleScope) -> String {
                 Attribute::IntrusiveModify => "areIntrusiveModified().and().",
                 Attribute::Base => "areBase().and().",
                 Attribute::TransitiveDependency => "areTransitiveDependencies().and().",
-                _ => "op.to_string().as_str()",
+                Attribute::Parameter => "areParameters().and().",
+                Attribute::NonSDKAPI => "areNonSDKAPI().and().",
+                Attribute::PromotedThroughIntrusiveModify => "arePromotedThroughIntrusiveModify().and().",
+                Attribute::ReflectModify => "areReflectModify().and().",
+                _ => panic!("not support attribute"),
             })
         } else {
             break;
@@ -284,7 +289,11 @@ fn vec_assert_attribute_to_string(attr: &Vec<Attribute>) -> Vec<String> {
                 Attribute::IntrusiveModify => "areIntrusiveModified().andShould().",
                 Attribute::Base => "areBase().andShould().",
                 Attribute::TransitiveDependency => "areTransitiveDependencies().andShould().",
-                _ => "op.to_string().as_str()",
+                Attribute::Parameter => "areParameters().andShould().",
+                Attribute::NonSDKAPI => "areNonSDKAPI().andShould().",
+                Attribute::PromotedThroughIntrusiveModify => "arePromotedThroughIntrusiveModify().andShould().",
+                Attribute::ReflectModify => "areReflectModify().andShould().",
+                _ => panic!("not support attribute"),
             }.to_string())
         } else {
             break;
@@ -390,6 +399,10 @@ fn vec_operator_to_string(ops: &Vec<Operator>, assert: &RuleAssert) -> String {
                             Operator::Rewrite => "notRewrite",
                             Operator::Inherit => "notInherit",
                             Operator::DependOn => "notDependOn",
+                            Operator::Call => "notCall",
+                            Operator::Use => "notUse",
+                            Operator::Override => "notOverride",
+                            Operator::Aggregate => "notAggregate",
 
                             Operator::BeAbstract => "notBeAbstract",
                             Operator::BeFinal => "notBeFinal",
@@ -416,6 +429,10 @@ fn vec_operator_to_string(ops: &Vec<Operator>, assert: &RuleAssert) -> String {
                 Operator::Rewrite => "Rewrite",
                 Operator::Inherit => "Inherit",
                 Operator::DependOn => "DependOn",
+                Operator::Call => "Call",
+                Operator::Use => "Use",
+                Operator::Override => "Override",
+                Operator::Aggregate => "Aggregate",
 
                 Operator::BeAbstract => "BeAbstract",
                 Operator::BeFinal => "BeFinal",

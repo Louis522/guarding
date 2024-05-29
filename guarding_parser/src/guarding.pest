@@ -27,7 +27,8 @@ rule_level = {
     "entity" |
     "interface" |
     "object" |
-    "API"
+    "API" |
+    "variable"
 }
 
 layer_rule = {
@@ -65,11 +66,14 @@ attrib = {
     "interface" |
     "field" |
     "anonymous" |
-    "non-SDK" |
     "API" |
-    "intrusiveModify" |
     "base" |
-    "transitiveDependency"
+    "transitiveDependency" |
+    "parameter" |
+    "non-SDK-API" |
+    "promoted-through-intrusive-modify" |
+    "intrusive-modify" |
+    "reflect-modify"
 }
 
 
@@ -172,14 +176,18 @@ operator = {
 	op_inside |
 	op_accessBy |
 	op_dependBy |
-//	op_extend  |
+	op_extend   |
 	op_implement |
-	op_extendBy |
+//	op_extendBy |
 	op_freeOfCircle |
 	op_embed |
 	op_rewrite |
 	op_inherit |
 	op_dependOn |
+	op_call |
+	op_use |
+	op_override |
+	op_aggregate |
 
 
 
@@ -210,14 +218,19 @@ op_resideIn	      = { "resideIn" }
 op_accessBy	      = { "accessBy" }
 op_dependBy	      = { "dependBy" }
 
-//op_extend         = { "extend" }
-op_extendBy       = { "extendBy" }
+op_extend         = { "extend" }
+//op_extendBy       = { "extendBy" }
 op_implement      = { "implement"}
 op_freeOfCircle      = { "freeOfCircle"}
 op_embed          = { "embed" }
 op_rewrite        = { "rewrite" }
 op_inherit        = { "inherit" }
 op_dependOn       = { "dependOn" }
+op_call           = { "call" }
+op_use            = { "use" }
+op_override       = { "override" }
+op_aggregate      = { "aggregate" }
+
 
 
 op_not            = @{ "not" }

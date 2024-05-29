@@ -1,5 +1,3 @@
 {
-  "result": [
-    "ArchRuleDefinition.classes().that().areActivelyNative().should().FreeOfCircleClassesThat().areExtensive().andShould().FreeOfCircleClassesThat().areTransitiveDependencies().andShould().FreeOfCircleC"
-  ]
+  "result": []
 }

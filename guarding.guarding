@@ -55,7 +55,26 @@
 //class [activelynative] should not dependOn class[base extensive]
 //class [extensive] should not dependOn class [extensive interface]
 //class [activelynative] should not dependOn object[extensive]
-class [activelynative ] should freeOfCircle class[extensive transitiveDependency]
+//class [activelynative ] should freeOfCircle class[extensive transitiveDependency]
+//class [activelynative] should not embed variable[field extensive]
+//class [activelynative] should not embed variable[field extensive]
+//class [activelynative] should not embed method[ extensive]
+//method[activelynative] should not embed variable[parameter extensive]
+//class [activelynative] should not embed class[inner extensive]
+//class [activelynative] should not embed class[ extensive anonymous]
+//class [activelynative] should not implement class [extensive interface]
+//class [activelynative] should not implement class [extensive interface]
+//class [activelynative] should not aggregate class [extensive]
+//method [extensive] should not call method[activelynative non-SDK-API]
+//method [extensive] should not use variable[activelynative non-SDK-API]
+//method [extensive] should not call method[activelynative  non-SDK-API  promoted-through-intrusive-modify]
+//method [extensive] should not use variable[activelynative non-SDK-API promoted-through-intrusive-modify]
+//method [extensive]  should not call method[activelynative promoted-through-intrusive-modify]
+//method [extensive] should not override method[final activelynative intrusive-modify]
+//method [extensive] should not call method[final activelynative reflect-modify]
+//class [activelynative] should not implement class [extensive interface]
+
+
 
 
 

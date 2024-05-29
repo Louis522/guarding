@@ -120,6 +120,7 @@ fn parse_rule_level(pair: Pair<Rule>) -> RuleLevel {
         "interface" => { RuleLevel::Interface }
         "object" => { RuleLevel::Object }
         "API" => { RuleLevel::API }
+        "variable" => { RuleLevel::Variable }
         &_ => { unreachable!("error rule level: {:?}", level_str) }
     }
 }
@@ -148,9 +149,13 @@ fn parse_attr(parent: Pair<Rule>) -> Vec<Attribute> {
             "anonymous" => { Attribute::Anonymous }
             "non-SDK" => { Attribute::NonSDK }
             "API" => { Attribute::API }
-            "intrusiveModify" => { Attribute::IntrusiveModify }
+            "intrusive-modify" => { Attribute::IntrusiveModify }
             "base" => { Attribute::Base }
             "transitiveDependency" => { Attribute::TransitiveDependency }
+            "parameter" => { Attribute::Parameter }
+            "non-SDK-API" => { Attribute::NonSDKAPI }
+            "promoted-through-intrusive-modify" => { Attribute::PromotedThroughIntrusiveModify }
+            "reflect-modify" => { Attribute::ReflectModify }
             &_ => {
                 panic!()
             }
@@ -194,14 +199,18 @@ fn parse_operator(parent: Pair<Rule>) -> Vec<Operator> {
         Rule::op_resideIn => { Operator::ResideIn }
         Rule::op_accessBy => { Operator::AccessBy }
         Rule::op_dependBy => { Operator::DependBy }
-        //Rule::op_extend => { Operator::Extend }
-        Rule::op_extendBy => { Operator::ExtendBy }
+        Rule::op_extend => { Operator::Extend }
+        //Rule::op_extendBy => { Operator::ExtendBy }
         Rule::op_implement => { Operator::Implement }
         Rule::op_freeOfCircle => { Operator::FreeOfCircle }
         Rule::op_embed => { Operator::Embed }
         Rule::op_rewrite => { Operator::Rewrite }
         Rule::op_inherit => { Operator::Inherit }
         Rule::op_dependOn => { Operator::DependOn }
+        Rule::op_call =>{ Operator::Call}
+        Rule::op_use => { Operator::Use }
+        Rule::op_override => { Operator::Override }
+        Rule::op_aggregate => { Operator::Aggregate }
 
         Rule::op_BePublic => { Operator::BePublic }
         Rule::op_BePrivate => { Operator::BePrivate }

@@ -102,6 +102,7 @@ pub enum RuleLevel {
     CodeBlock,
     Object,
     API,
+    Variable,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -171,7 +172,11 @@ pub enum Attribute {
     API,
     IntrusiveModify,
     Base,
-    TransitiveDependency
+    TransitiveDependency,
+    Parameter,
+    NonSDKAPI,
+    PromotedThroughIntrusiveModify,
+    ReflectModify
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -214,6 +219,10 @@ pub enum Operator {
     Rewrite,
     Inherit,
     DependOn,
+    Call,
+    Use,
+    Override,
+    Aggregate,
 
     BePublic,
     BePrivate,
