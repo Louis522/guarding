@@ -143,6 +143,17 @@ fn parse_attr(parent: Pair<Rule>) -> Vec<Attribute> {
             "extensive" => { Attribute::Extensive }
             "local" => { Attribute::Local }
             "interface" => { Attribute::Interface }
+            "inner" => { Attribute::Inner }
+            "field" => { Attribute::Field }
+            "anonymous" => { Attribute::Anonymous }
+            "non-SDK" => { Attribute::NonSDK }
+            "API" => { Attribute::API }
+            "intrusiveModify" => { Attribute::IntrusiveModify }
+            "base" => { Attribute::Base }
+            "transitiveDependency" => { Attribute::TransitiveDependency }
+            &_ => {
+                panic!()
+            }
             _ => {
                 panic!("implementing ops: {:?}, text: {:?}", pair.as_rule(), pair.as_span())
             }
@@ -188,6 +199,9 @@ fn parse_operator(parent: Pair<Rule>) -> Vec<Operator> {
         Rule::op_implement => { Operator::Implement }
         Rule::op_freeOfCircle => { Operator::FreeOfCircle }
         Rule::op_embed => { Operator::Embed }
+        Rule::op_rewrite => { Operator::Rewrite }
+        Rule::op_inherit => { Operator::Inherit }
+        Rule::op_dependOn => { Operator::DependOn }
 
         Rule::op_BePublic => { Operator::BePublic }
         Rule::op_BePrivate => { Operator::BePrivate }

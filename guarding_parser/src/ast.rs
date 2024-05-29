@@ -162,7 +162,16 @@ pub enum Attribute {
     Extensive,
     IntrusivelyNative,
     Local,
-    Interface
+    Interface,
+
+    Inner,
+    Field,
+    Anonymous,
+    NonSDK,
+    API,
+    IntrusiveModify,
+    Base,
+    TransitiveDependency
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -202,6 +211,9 @@ pub enum Operator {
     Implement,
     FreeOfCircle,
     Embed,
+    Rewrite,
+    Inherit,
+    DependOn,
 
     BePublic,
     BePrivate,

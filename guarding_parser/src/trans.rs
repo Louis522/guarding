@@ -231,6 +231,14 @@ fn vec_attribute_to_string(attr: &Vec<Attribute>, scope: &RuleScope) -> String {
                 Attribute::IntrusivelyNative => "areIntrusivelyNative().and().",
                 Attribute::Local => "areLocal().and().",
                 Attribute::Interface => "areInterfaces().and().",
+                Attribute::Inner => "areInner().and().",
+                Attribute::Anonymous => "areAnonymous().and().",
+                Attribute::Field => "areFields().and().",
+                Attribute::NonSDK => "areNonSDK().and().",
+                Attribute::API => "areAPI().and().",
+                Attribute::IntrusiveModify => "areIntrusiveModified().and().",
+                Attribute::Base => "areBase().and().",
+                Attribute::TransitiveDependency => "areTransitiveDependencies().and().",
                 _ => "op.to_string().as_str()",
             })
         } else {
@@ -268,6 +276,14 @@ fn vec_assert_attribute_to_string(attr: &Vec<Attribute>) -> Vec<String> {
                 Attribute::Extensive => "areExtensive().andShould().",
                 Attribute::Local => "areLocal().andShould().",
                 Attribute::Interface => "areInterfaces().andShould().",
+                Attribute::Inner => "areInner().andShould().",
+                Attribute::Anonymous => "areAnonymous().andShould().",
+                Attribute::Field => "areFields().andShould().",
+                Attribute::NonSDK => "areNonSDK().andShould().",
+                Attribute::API => "areAPI().andShould().",
+                Attribute::IntrusiveModify => "areIntrusiveModified().andShould().",
+                Attribute::Base => "areBase().andShould().",
+                Attribute::TransitiveDependency => "areTransitiveDependencies().andShould().",
                 _ => "op.to_string().as_str()",
             }.to_string())
         } else {
@@ -371,6 +387,9 @@ fn vec_operator_to_string(ops: &Vec<Operator>, assert: &RuleAssert) -> String {
                             Operator::Implement => "notImplement",
                             Operator::FreeOfCircle => "notFreeOfCircle",
                             Operator::Embed => "notEmbed",
+                            Operator::Rewrite => "notRewrite",
+                            Operator::Inherit => "notInherit",
+                            Operator::DependOn => "notDependOn",
 
                             Operator::BeAbstract => "notBeAbstract",
                             Operator::BeFinal => "notBeFinal",
@@ -394,6 +413,9 @@ fn vec_operator_to_string(ops: &Vec<Operator>, assert: &RuleAssert) -> String {
                 Operator::Implement => "Implement",
                 Operator::FreeOfCircle => "FreeOfCircle",
                 Operator::Embed => "Embed",
+                Operator::Rewrite => "Rewrite",
+                Operator::Inherit => "Inherit",
+                Operator::DependOn => "DependOn",
 
                 Operator::BeAbstract => "BeAbstract",
                 Operator::BeFinal => "BeFinal",

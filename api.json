@@ -1,7 +1,5 @@
 {
   "result": [
-    "ArchRuleDefinition.interfaces().that().areExtensive().should().notBeDependByEntitiesThat().areActivelyNative()",
-    "ArchRuleDefinition.objects().that().areExtensive().should().notBeDependByEntitiesThat().areActivelyNative()",
-    "ArchRuleDefinition.priority(Priority.HIGH).classes().that().areExtensive().and().areInterfaces().should().notBeDependByEntitiesThat().areActivelyNative()"
+    "ArchRuleDefinition.classes().that().areActivelyNative().should().FreeOfCircleClassesThat().areExtensive().andShould().FreeOfCircleClassesThat().areTransitiveDependencies().andShould().FreeOfCircleC"
   ]
 }

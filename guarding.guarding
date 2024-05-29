@@ -36,6 +36,30 @@
 //methods().that().areActivelyNative().should().embedParametersThat().areExtensive();
 //method[activelynative] should not implement parameter[extensive static private];
 //method[activelynative] should not embed codeBlock[extensive local]
-interface[extensive] should not dependBy entity[activelynative]
-object[extensive] should not dependBy entity[activelynative]
-class[extensive interface] should not dependBy entity[activelynative] (HIGH)
+//method[extensive] should not dependBy entity[activelynative]
+//object[extensive] should not dependBy entity[activelynative] (LOW)
+//class[extensive interface] should not dependBy entity[activelynative] (HIGH)
+//class [activelynative] should not embed class[field extensive]
+//class [activelynative] should not embed method[extensive]
+//method[activelynative] should not implement parameter[extensive]
+//class [activelynative] should not embed class[inner extensive]
+//class [activelynative] should not embed class[ extensive anonymous]
+//method [activelynative] should not embed codeBlock[local extensive]
+//method [extensive] should not dependOn method[API non-SDK]
+//method[API non-SDK] should not dependBy method [extensive]
+//method[API non-SDK intrusiveModify] should not dependBy  method [extensive]
+//method[ intrusiveModify] should not dependBy method [extensive]
+//method [extensive] should not inherit method[final  intrusiveModify]
+//method [extensive] should not rewrite method[final  intrusiveModify]
+//method [extensive] should not inherit method[final  intrusiveModify]
+//class [activelynative] should not dependOn class[base extensive]
+//class [extensive] should not dependOn class [extensive interface]
+//class [activelynative] should not dependOn object[extensive]
+class [activelynative ] should freeOfCircle class[extensive transitiveDependency]
+
+
+
+
+
+
+

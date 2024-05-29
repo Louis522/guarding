@@ -61,7 +61,15 @@ attrib = {
     "extensive" |
     "intrusivelynative" |
     "local" |
-    "interface"
+    "inner" |
+    "interface" |
+    "field" |
+    "anonymous" |
+    "non-SDK" |
+    "API" |
+    "intrusiveModify" |
+    "base" |
+    "transitiveDependency"
 }
 
 
@@ -169,6 +177,9 @@ operator = {
 	op_extendBy |
 	op_freeOfCircle |
 	op_embed |
+	op_rewrite |
+	op_inherit |
+	op_dependOn |
 
 
 
@@ -204,6 +215,9 @@ op_extendBy       = { "extendBy" }
 op_implement      = { "implement"}
 op_freeOfCircle      = { "freeOfCircle"}
 op_embed          = { "embed" }
+op_rewrite        = { "rewrite" }
+op_inherit        = { "inherit" }
+op_dependOn       = { "dependOn" }
 
 
 op_not            = @{ "not" }
