@@ -10,7 +10,9 @@ class("..myapp..")::vars.len should <= 20;
 class("..myapp..")::function.vars.len should <= 20;
 
 class(implementation "Connection.class")::name should endsWith "Connection";
+//任何实现（implements）了Connection.class接口的类，其类名应该以"Connection"结尾。
 class(extends "Connection.class")::name endsWith "Connection";
+//任何继承（extends）自Connection.class的类，其类名也应该以"Connection"结尾。
 
 # todo: define in = inside = resideIn
 class(assignable "EntityManager.class") in package("..persistence.");

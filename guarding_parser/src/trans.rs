@@ -1,7 +1,3 @@
-use std::convert::TryInto;
-use std::ffi::c_int;
-use std::fmt::{format, write};
-
 extern crate regex;
 
 use regex::Regex;
@@ -26,13 +22,13 @@ impl ToString for GuardRule {
                                  // guard_rule.ops.to_sting(),
                                  //vec_operator_to_string(&self.ops, &self.assert),
                                  //近似scope处理
-                                 Vec_assert_to_string(&self.assert, Opr, &self.scope));
+                                 vec_assert_to_string(&self.assert, Opr, &self.scope));
         //self.assert.to_string());
         result
     }
 }
 
-fn Vec_assert_to_string(assert: &RuleAssert, opr: String, scope: &RuleScope) -> String {
+fn vec_assert_to_string(assert: &RuleAssert, opr: String, scope: &RuleScope) -> String {
     let mut result = String::new();
     {
         match assert {
@@ -337,14 +333,15 @@ impl ToString for RuleScope {
         match self {
             RuleScope::All => "".to_string(),
             RuleScope::PathDefine(path) => format!("PathDefine({})", path),
-            RuleScope::Extend(extension) => format!("Extend({})", extension),
+            /*RuleScope::Extend(extension) => format!("Extend({})", extension),
             RuleScope::Assignable(assignable) => format!("Assignable({})", assignable),
             RuleScope::Implementation(implementation) => format!("Implementation({})", implementation),
             RuleScope::MatchRegex(regex) => format!("MatchRegex({})", regex),
             RuleScope::ActivelyNative(path) => format!("areActivelyNative().andShould().{}", path_join(path)), //????????????????
-            RuleScope::Extensive(path) => format!("areExtensive().andShould().{}", path_join(path)),
+            RuleScope::Extensive(path) => format!("areExtensive().andShould().{}", path_join(path)),*/
             RuleScope::PackageName(path) => format!("{}", path_join(path)),
             //...其他scope扩充/多scope处理
+            _ => "".to_string(),
         }
     }
 }

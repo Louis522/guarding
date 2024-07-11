@@ -12,35 +12,27 @@ declaration = {
 // file is a container of classes and functions
 // classes is a container of functions and field
 normal_rule = {
-	rule_level ~ "["~attribute~("(" ~ scope ~ ")")?~"]" ~ (use_symbol ~ expression)? ~ should? ~ only? ~ operator ~ assert? ~ "("? ~priority?~ ")"?~ ";"?
+	rule_level ~ "[" ~ attribute~("(" ~ scope ~ ")")?~"]" ~ (use_symbol ~ expression)? ~ should? ~ only?~ can? ~ operator ~ assert? ~ "("? ~priority?~ ")"?~ ";"?
 }
 
 rule_level = {
     "package" |
     "class" |
-    "struct" |
-    "function" |
+    "struct" |   //在 C++ 中，class 和 struct 很相似，但默认访问级别不同。在 Java 和 C# 中，class 用于定义对象类型，而没有 struct 关键字。在 Rust 中，struct 用于定义数据类型，而没有 class 关键字。
+    "function" | //面向对象中function 可能独立于任何特定的类或对象之外
     "file" |
-    "method" |
+    "method" |  // method 通常是指与某个对象或类关联的函数
     "parameter" |
     "codeBlock" |
     "entity" |
     "interface" |
     "object" |
-    "API" |
     "variable"
 }
 
 layer_rule = {
 	"layer" ~ "(" ~ layer_type ~ ")" ~ (use_symbol ~ layer_expression)* ~ ";"?
 }
-
-// use property
-use_symbol = {
-    "::" |
-    "->"
-}
-
 layer_type = {
     string
 }
@@ -48,6 +40,13 @@ layer_type = {
 layer_expression = {
     identifier ~ "(" ~ string ~ (comma ~ string)* ~ ")"
 }
+// use property
+use_symbol = {
+    "::" |
+    "->"
+}
+
+
 attribute = {
        attrib*
 }
@@ -66,7 +65,7 @@ attrib = {
     "interface" |
     "field" |
     "anonymous" |
-    "API" |
+    "API" |   //Todo 保留?
     "base" |
     "transitiveDependency" |
     "parameter" |
@@ -78,14 +77,14 @@ attrib = {
 
 
 scope = {
-    path_scope |
-    impl_scope |
-    extend_scope |
-    assignable_scope |
-    match_scope |
-    actively_native_scope |
-    package_name_scope |
-    extensive_scope
+    path_scope |   //只是一个路径,可以表示为"myapp1",来自myapp1的rulelevel
+    impl_scope |   //(implementation "myapp1")实现了myapp1接口的类
+    extend_scope | //(extends "myapp1")继承自myapp1的类
+    assignable_scope | //(assignable "myapp1")可以赋值给myapp1的rulelevel(类)
+    match_scope |  //package(match("^/app")) endsWith "Connection"; 在所有以".app"开始的包中查找那些类名以"Connection"结尾的类
+    package_name_scope // 包名
+   /* extensive_scope*/
+   /* actively_native_scope |*/
 }
 
 path_scope = {
@@ -106,16 +105,18 @@ impl_scope = {
     "implementation" ~ string ~ extent
 }
 
+/*
 actively_native_scope = {
     "activelynative" ~ string ~ extent
 }
+*/
 
 package_name_scope = {
     "packagename" ~string ~ extent
 }
-extensive_scope = {
+/*extensive_scope = {
     "extensive" ~ string ~ extent
-}
+}*/
 
 extent ={
  ("," ~ string)*?
@@ -207,6 +208,7 @@ priority = {
    "MEDIUM" |
    "LOW"
 }
+
 // todo: change to strings operations method
 op_contains	      = { "contains" }
 op_endsWith	      = { "endsWith" }
@@ -257,7 +259,7 @@ op_BeIntrusivelyNative = { "BeIntrusivelyNative" }
 
 should            = { "should" }
 only              = { "only" }
-
+can               = { "can" }
 double_quoted_string  = @{ "\"" ~ (!("\"") ~ ANY)* ~ "\""}
 single_quoted_string  = @{ "\'" ~ (!("\'") ~ ANY)* ~ "\'"}
 

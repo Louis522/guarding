@@ -1,123 +1,19 @@
-·<自然语言描述规则，DSL语法，规则的DSL>,我需要的输出结果是描述规则的DSL，请学习我给出的这几个例子，而后我会输入自然语言描述规则，请输出 规则的DSL(只生成结果)。
-·DSL语法{
-rule_level ~ "["~attribute~("(" ~ scope ~ ")")?~"]"  ~ should? ~ only? ~ operator ~ assert? ~ ";"?
+第一次输入：你是一个软件工程架构检测领域专家，擅长自然语言到DSL的转换。 定义一个三元组”<自然语言描述规则，简化DSL文法，规则的DSL>”,该三元组含义为:输入“自然语言描述规则”转换为相应“规则的DSL”，要求语义准确，转换满足提供的简化DSL文法要求，且只生成DSL。我接下来输入简化DSL文法，请学习。
+第二次输入：简化DSL文法：采用分层定义，第一层为（ruleType）层，第二层为（ruleField）层。可有多个attribute,以下是转换规则DSL语法结构:
+ruleType:
+< rulelevel[attribute* scope] operator assert>。注意"-(...)"里"..."这部分内容为对"-"前所指内容的的自然语言对照
 
-rule_level = {
-    "package" |
-    "class" |
-    "struct" |
-    "function" |
-    "file" |
-    "method" |
-    "parameter"
-}
-attribute = {
-       attrib*
-}
-attrib = {
-    "public" |
-    "private" |
-    "protected" |
-    "static" |
-    "final" |
-    "abstract"|
-    "activelynative"|
-    "extensive"|
-    "intrusivelynative"
-}
+ruleField:
+rulelevel范围为<package、class、struct、function、file、method、parameter、codeBlock、entity、object、API、variable>
+scope范围为空或<packagename("A","B")-(来自包A,B里的)、("A")-(A里的)、extends-("A","B")-(继承自A,B的)>,
+attribute范围为<public、private、protected、static、final、abstract、activelynative-(原生)、extensive-(伴生)、local、inner、interface-(接口)、field-(成员的)、anonymous、API、base、transitiveDependency、parameter、non-SDK-API、promoted-through-intrusive-modify、intrusive-modify、reflect-modify>
+operator范围为<call、use、override、aggregate-(聚类)、contains、accessBy、dependBy、extend、implement、freeOfCircle-(循环依赖)、embed、rewrite、inherit、dependOn、not、endsWith、startsWith、inside、resideIn、BePublic、BePrivate、BeProtected、BeStatic、BeFinal、BeAbstract、BeActivelyNative、BeExtensive、BeIntrusivelyNative>
+assert结构为空或<rulelevel[attribute scope]>
 
-scope = {
-    actively_native_scope |
-    package_name_scope |
-    extensive_scope
-}
+参考示例
+<example><packgeA里原生的类不应该嵌入packageB里伴生的匿名类,DSL语法, class [activelynative (packagename "packageA")]should not embed class[extensive anonymous (packagename "packageB")] > </example>
+<example><伴生的方法，不应该调用原生的、非本地API的、通过侵入式修改的变量,DSL语法,method [extensive] should not use variable[activelynative non-SDK-API promoted-through-intrusive-modify]> </example>
+<example><packgeA里原生的类不应该实现伴生的接口,DSL语法, class [activelynative (packagename "packageA")] should not implement class [extensive interface]> </example>
+<example><原生的类不应该嵌入伴生的成员变量,DSL语法, class [activelynative] should not embed variable[field extensive]> </example>
 
-actively_native_scope = {
-    "activelynative" ~ string ~ extent
-}
-
-package_name_scope = {
-    "packagename" ~ string ~ extent
-}
-extensive_scope = {
-    "extensive" ~ string ~ extent
-}
-extent ={
- ("," ~ string)*?
-}
-
-assert = {
-    leveled |
-    stringed |
-    array_stringed |
-    sized
-}
-
-array_stringed = {
-    rule_level?~ "["~attribute? ~"("  ~ (scope?) ~ ")"~ "]"
-}
-
-stringed = {
-    "("?~ (scope?) ~ string ~ ")"?
-}
-
-leveled = {
-    rule_level ~ "(" ~ scope? ~ ")"
-}
-
-sized = {
-    int
-}
-operator = {
-
-	op_accessBy |
-	op_dependBy |
-    op_extend  |
-	op_implement |
-	op_extendBy |
-	op_freeOfCircle
-    op_embed |
-	op_BePublic  |
-	op_BePrivate |
-	op_BeProtected |
-	op_BeStatic |
-	op_BeFinal |
-	op_BeAbstract |
-	op_BeActivelyNative |
-	op_BeExtensive |
-	op_BeIntrusivelyNative
-}
-op_accessBy	      = { "accessBy" }
-op_dependBy	      = { "dependBy" }
-op_extendBy       = { "extendBy" }
-op_implement      = { "implement"}
-op_freeOfCircle      = { "freeOfCircle"}
-
-// class[public ] should BeActivelyNative
-op_BePublic        = { "BePublic" }
-op_BePrivate        = { "BePrivate" }
-op_BeProtected     = { "BeProtected" }
-op_BeStatic        = { "BeStatic" }
-op_BeFinal         = { "BeFinal" }
-op_BeAbstract      = { "BeAbstract" }
-op_BeActivelyNative = { "BeActivelyNative" }
-op_BeExtensive     = { "BeExtensive" }
-op_BeIntrusivelyNative = { "BeIntrusivelyNative" }
-
-should            = { "should" }
-only              = { "only" }
-
-}
-·学习例子
-<packgeA里伴生的类不应该被packageB里原生的类继承，rule_level ~ “[”~attribute~(“(” ~ scope ~ “)”)?~“]” ~ should? ~ only? ~ operator ~ assert? ~ “;”?，class[extensive(packagename “packageA”)] should not extendedBy class[activelynative(packagename “packageB”)]>；
-<packgeA里公共的类不应该被packageB里的final类继承， rule_level ~ "["~attribute~("(" ~ scope ~ ")")?~"]" ~ should? ~ only? ~ operator ~ assert? ~ ";"?,class[public(packagename “packageA”)] should not extendedBy class[final(packagename “packageB”)]>；
-<packgeC里伴生的,公共的类不应该被packageB，packageC,packageD里原生的类继承， rule_levsel ~ “[”~attribute~(“(” ~ scope ~ “)”)?~“]” ~ should? ~ only? ~ operator ~ assert? ~ “;”?，class[extensive public (packagename “packageC”)] should not extendedBy class[activelynative(packagename “packageB”,”packageC”,”packageD”)]>；
-<packgeB,packageC里伴生的,公共的类不可以被packageD里原生的,公共的类实现， rule_level ~ “[”~attribute~(“(” ~ scope ~ “)”)?~“]” ~ should? ~ only? ~ operator ~ assert? ~ “;”?，class[extensive public (packagename “packageB”,”packageC”)] should not implement class[activelynative public(packagename “packageD”)]>；
-<packgeD里伴生的,公共的,静态的类不会被packageB里原生的,公共的类实现， rule_level ~ “[”~attribute~(“(” ~ scope ~ “)”)?~“]” ~ should? ~ only? ~ operator ~ assert? ~ “;”?，class[extensive public static (packagename "packageD")] should not implement class[activelynative public(packagename "packageB")]>
-<伴生的,公共的,静态的类不会被原生的,公共的类实现， rule_level ~ “[”~attribute~(“(” ~ scope ~ “)”)?~“]” ~ should? ~ only? ~ operator ~ assert? ~ “;”?，class[extensive public static] should not implement class[activelynative public]>
-<伴生的,公共的,静态的类可以被原生的,公共的类实现， rule_level ~ “[”~attribute~(“(” ~ scope ~ “)”)?~“]” ~ should? ~ only? ~ operator ~ assert? ~ “;”?，class[extensive public static] should implement class[activelynative public]>
-<原生的,公共的类可以被原生的,静态的类实现， rule_level ~ “[”~attribute~(“(” ~ scope ~ “)”)?~“]” ~ should? ~ only? ~ operator ~ assert? ~ “;”?，class[activilynative public] should implement class[extensive static]>
-<原生的方法不能嵌入伴生的参数， rule_level ~ “[”~attribute~(“(” ~ scope ~ “)”)?~“]” ~ should? ~ only? ~ operator ~ assert? ~ “;”?，method[activelynative] should not embed parameter[extensive]>
-<原生的方法应该嵌入伴生的参数， rule_level ~ “[”~attribute~(“(” ~ scope ~ “)”)?~“]” ~ should? ~ only? ~ operator ~ assert? ~ “;”?，method[activelynative] should embed parameter[extensive]>
-
-
+将我接下来输入的自然语言，请转换成相对应的规则的DSL,只生成规则的DSL，不需要解释。

@@ -3,7 +3,7 @@ use std::path::PathBuf;
 use tokio;
 use clap::{AppSettings, Clap};
 use guarding::exec_guarding;
-use guarding_parser::interact_with_qianwen;
+use guarding_parser::interact_with_llama;
 
 #[derive(Clap)]
 #[clap(version = "1.0", author = "Inherd Group <group@inherd.org>")]
@@ -33,10 +33,9 @@ fn main() {
     let output = PathBuf::from(opts.output);
     let pre_command = PathBuf::from(opts.command);
     let conf = PathBuf::from(opts.config);
-    //interact_with_qianwen::llm_trans_with_qianwen(&pre_command,&conf,&input);
-    let content = fs::read_to_string(input).unwrap();
-
-    let errors = exec_guarding(content, buf,output);
+    interact_with_llama::llm_trans_with_llama(&pre_command.as_path().to_str().unwrap_or_default(),&input.as_path().to_str().unwrap_or_default());
+    let content = fs::read_to_string(input.clone()).unwrap();
+    let errors = exec_guarding(content, buf,output,&input);
     // let content = serde_json::to_string_pretty(&errors).unwrap();
     // let _ = fs::write(opts.output, content);
 }

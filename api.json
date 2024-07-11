@@ -1,3 +1,6 @@
 {
-  "result": []
+  "DSL": "class[activelynative] should not implement class[extensive]\n",
+  "result": [
+    "ArchRuleDefinition.classes().that().areActivelyNative().should().notImplementClassesThat().areExtensive()"
+  ]
 }

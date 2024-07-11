@@ -12,3 +12,5 @@ pub mod errors;
 pub mod support;
 mod trans;
 pub mod interact_with_qianwen;
+pub mod interact_with_llama;
+pub mod api_output_history;
