@@ -1,6 +1,6 @@
 {
-  "DSL": "class[activelynative] should not implement class[extensive]\n",
+  "DSL": "class [public (packagename \"EntityManager\")] should not dependOn class[private (packagename \"mypackage1\")];\n",
   "result": [
-    "ArchRuleDefinition.classes().that().areActivelyNative().should().notImplementClassesThat().areExtensive()"
+    "ArchRuleDefinition.classes().that().arePublic().and().resideInAPackage(EntityManager).should().notDependOnClassesThat().arePrivate().andShould().notDependOnClassesThat().resideInAPackage(mypackage1)"
   ]
 }

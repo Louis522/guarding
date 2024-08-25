@@ -105,7 +105,7 @@ impl RuleExecutor {
                 let _ = &self.models.iter().for_each(|file| {
                     let classes: Vec<CodeClass> = file.classes.iter()
                         .filter(|class| {
-                            class.implements.contains(str)
+                            class.implements.contains(&str.join(""))
                         })
                         .map(|s| s.clone())
                         .collect();
@@ -161,7 +161,7 @@ impl RuleExecutor {
 
         let operator = &rule.ops[0];
         match operator {
-            Operator::AccessBy => {
+            Operator::beAccessedBy => {
                 match &rule.assert {
                     RuleAssert::Stringed(scp,pkg_identifier) => {
                         assert_models = self.filter_classes_by_package_identifier(pkg_identifier);
@@ -196,7 +196,7 @@ impl RuleExecutor {
         let mut assert_success = true;
 
         match operator {
-            Operator::AccessBy => {
+            Operator::beAccessedBy => {
                 let paths = self.search_by_access(pkg_identifier);
                 if paths.len() > 0 {
                     assert_success = false;

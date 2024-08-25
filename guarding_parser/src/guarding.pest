@@ -12,7 +12,7 @@ declaration = {
 // file is a container of classes and functions
 // classes is a container of functions and field
 normal_rule = {
-	rule_level ~ "[" ~ attribute~("(" ~ scope ~ ")")?~"]" ~ (use_symbol ~ expression)? ~ should? ~ only?~ can? ~ operator ~ assert? ~ "("? ~priority?~ ")"?~ ";"?
+	rule_level ~ "["? ~ attribute~("("? ~ scope ~ ")"?)?~"]"? ~ (use_symbol ~ expression)? ~ should? ~ only?~ can? ~ operator ~ assert? ~ "("? ~priority?~ ")"?~ ";"?~"␊"?
 }
 
 rule_level = {
@@ -82,9 +82,9 @@ scope = {
     extend_scope | //(extends "myapp1")继承自myapp1的类
     assignable_scope | //(assignable "myapp1")可以赋值给myapp1的rulelevel(类)
     match_scope |  //package(match("^/app")) endsWith "Connection"; 在所有以".app"开始的包中查找那些类名以"Connection"结尾的类
-    package_name_scope // 包名
-   /* extensive_scope*/
-   /* actively_native_scope |*/
+    package_name_scope  |// 包名
+    extensive_scope |
+    actively_native_scope
 }
 
 path_scope = {
@@ -92,7 +92,7 @@ path_scope = {
 }
 
 match_scope = {
-    "match" ~ "(" ~ string ~ ")"
+    "match" ~ string
 }
 assignable_scope = {
     "assignable" ~ string ~ extent
@@ -105,18 +105,16 @@ impl_scope = {
     "implementation" ~ string ~ extent
 }
 
-/*
 actively_native_scope = {
     "activelynative" ~ string ~ extent
 }
-*/
 
 package_name_scope = {
     "packagename" ~string ~ extent
 }
-/*extensive_scope = {
+extensive_scope = {
     "extensive" ~ string ~ extent
-}*/
+}
 
 extent ={
  ("," ~ string)*?
@@ -138,15 +136,15 @@ assert = {
 }
 
 array_stringed = {
-    rule_level?~ "["~attribute? ~"("?  ~ scope?~ ")"?~ "]"
+     rule_level? ~ "in"? ~ "[" ~ !"]" ~ !operator~ "in"? ~ (attribute ~ ( "(" ~ scope ~ ")" )?) ~ "]"
 }
 
 stringed = {
-    "("?~ (scope?) ~ string ~ ")"?
+    "("? ~ "in"? ~ (scope?) ~ string ~ ")"?
 }
 
 leveled = {
-    rule_level ~ "(" ~ scope? ~ ")"
+    rule_level  ~"["? ~ "("?~ scope ~ ")"?~ "]"?
 }
 
 sized = {
@@ -176,11 +174,11 @@ operator = {
 	op_resideIn |
 	op_inside |
 	op_accessBy |
-	op_dependBy |
+	//op_dependBy |
 	op_extend   |
 	op_implement |
 //	op_extendBy |
-	op_freeOfCircle |
+	op_freeOfCircular |
 	op_embed |
 	op_rewrite |
 	op_inherit |
@@ -217,13 +215,13 @@ op_startsWith     = { "startsWith" }
 // todo: thinking in define packages ops
 op_inside	      = { "inside" }
 op_resideIn	      = { "resideIn" }
-op_accessBy	      = { "accessBy" }
+op_accessBy	      = { "beAccessedBy" | "BeAccessedBy" }
 op_dependBy	      = { "dependBy" }
 
 op_extend         = { "extend" }
 //op_extendBy       = { "extendBy" }
 op_implement      = { "implement"}
-op_freeOfCircle      = { "freeOfCircle"}
+op_freeOfCircular      = { "freeOfCircular"}
 op_embed          = { "embed" }
 op_rewrite        = { "rewrite" }
 op_inherit        = { "inherit" }
@@ -262,10 +260,11 @@ only              = { "only" }
 can               = { "can" }
 double_quoted_string  = @{ "\"" ~ (!("\"") ~ ANY)* ~ "\""}
 single_quoted_string  = @{ "\'" ~ (!("\'") ~ ANY)* ~ "\'"}
-
+double_quoted_string_chinese  = @{ "“" ~ (!("”") ~ ANY)* ~ "”"}
 string = @{
     double_quoted_string |
-    single_quoted_string
+    single_quoted_string |
+    double_quoted_string_chinese
 }
 
 number = @{ '0'..'9'+ }

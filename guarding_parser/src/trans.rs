@@ -14,7 +14,7 @@ impl ToString for GuardRule {
                                  vec_attribute_to_string(&self.attr, &self.scope),
                                  //that
                                  self.scope.to_string(),
-                                 //should
+                                 // should
                                  // self.origin,
                                  // guard_rule.ty.to_string(),
                                  // guard_rule.expr.to_string(),
@@ -43,7 +43,35 @@ fn vec_assert_to_string(assert: &RuleAssert, opr: String, scope: &RuleScope) -> 
             ToDo
              */
             RuleAssert::Stringed(scp, str) => {}
-            RuleAssert::Leveled(lv, scp, package_ident) => {}
+            RuleAssert::Leveled(lv, scp, package_ident) => {
+                result.push_str(&*opr);
+                /**
+                 assert的scope若为All,去除末尾.and().andShould().notImplementClassesThat().
+                后续若有
+                 */
+                match scp {
+                    RuleScope::All => {
+                        //由于rust特性,无法对string使用pop
+                        // 计算opr的长度并从result的末尾移除相应长度的字符串加上.should().一并移除
+                        let opr_length = opr.len();
+                        if (opr.starts_with("not")) {
+                            //只去掉.should().
+                            result.truncate(result.len() - (opr_length + 13));
+                        } else {
+                            result.truncate(result.len() - 13);
+                        }
+                    }
+                    _ => {}
+                }
+
+                /**
+                //在末尾resideIn插入之前要先检查末尾是不是implementclases等
+                let opr_length = opr.len();
+                if(result.ends_with(&*opr)){
+                    result.truncate(result.len() -opr_length );
+                }*/
+                result.push_str(&*scp.to_string())
+            }
             RuleAssert::ArrayStringed(lv, attr, scp) => {
                 result.push_str(&*opr);
                 let mut attribute = vec_assert_attribute_to_string(attr);
@@ -62,9 +90,9 @@ fn vec_assert_to_string(assert: &RuleAssert, opr: String, scope: &RuleScope) -> 
                     result.push_str(app);
 
                     /**非not operator 省去追加的多个not~operaror~ruleLevel~.
-                                                            if(opr.starts_with("not")){
-                                                            result.push_str(&*opr);
-                                                        }*/
+                                                                                if(opr.starts_with("not")){
+                                                                                result.push_str(&*opr);
+                                                                            }*/
                     result.push_str(&*opr);
                 }
 
@@ -177,7 +205,7 @@ andShould().notImplementClassesThat().resideInAPackage(controller) //
 }
  */
 
-impl ToString for RulePriority{
+impl ToString for RulePriority {
     fn to_string(&self) -> String {
         match self {
             RulePriority::High => "ArchRuleDefinition.priority(Priority.HIGH).".to_string(),
@@ -187,6 +215,7 @@ impl ToString for RulePriority{
         }
     }
 }
+
 impl ToString for RuleLevel {
     fn to_string(&self) -> String {
         match self {
@@ -333,13 +362,13 @@ impl ToString for RuleScope {
         match self {
             RuleScope::All => "".to_string(),
             RuleScope::PathDefine(path) => format!("PathDefine({})", path),
-            /*RuleScope::Extend(extension) => format!("Extend({})", extension),
-            RuleScope::Assignable(assignable) => format!("Assignable({})", assignable),
-            RuleScope::Implementation(implementation) => format!("Implementation({})", implementation),
-            RuleScope::MatchRegex(regex) => format!("MatchRegex({})", regex),
-            RuleScope::ActivelyNative(path) => format!("areActivelyNative().andShould().{}", path_join(path)), //????????????????
-            RuleScope::Extensive(path) => format!("areExtensive().andShould().{}", path_join(path)),*/
-            RuleScope::PackageName(path) => format!("{}", path_join(path)),
+            RuleScope::Extend(extension) => format!("{}", extension_path_join(extension)),
+            RuleScope::Assignable(assignable) => format!("{}", assignable_path_join(assignable)),
+            RuleScope::Implementation(implementation) => format!("{}", implementation_path_join(implementation)),
+            RuleScope::MatchRegex(regex) => format!("{}", match_path_join(regex)),
+            /*RuleScope::ActivelyNative(path) => format!("areActivelyNative().andShould().{}", packagename_path_join(path)), //????????????????
+            RuleScope::Extensive(path) => format!("areExtensive().andShould().{}", packagename_path_join(path)),*/
+            RuleScope::PackageName(path) => format!("{}", packagename_path_join(path)),
             //...其他scope扩充/多scope处理
             _ => "".to_string(),
         }
@@ -347,7 +376,7 @@ impl ToString for RuleScope {
 }
 
 //对象路径处理
-fn path_join(path: &Vec<String>) -> String {
+fn packagename_path_join(path: &Vec<String>) -> String {
     let mut result = String::new();
 
     if (path.len() == 1) {
@@ -355,6 +384,94 @@ fn path_join(path: &Vec<String>) -> String {
         result.push_str(path.first().unwrap().as_str());
     } else {
         result.push_str("resideInAnyPackage(");
+        for (i, app) in path.iter().enumerate() {
+            if i != path.len() {
+                result.push_str(app);
+                result.push_str(",");
+            }
+        }
+        if result.ends_with(",") {
+            result.pop();
+        }
+    }
+    result.push_str(")");
+    result
+}
+
+fn extension_path_join(path: &Vec<String>) -> String {
+    let mut result = String::new();
+
+    if (path.len() == 1) {
+        result.push_str("extendFrom(");
+        result.push_str(path.first().unwrap().as_str());
+    } else {
+        result.push_str("extendFrom(");
+        for (i, app) in path.iter().enumerate() {
+            if i != path.len() {
+                result.push_str(app);
+                result.push_str(",");
+            }
+        }
+        if result.ends_with(",") {
+            result.pop();
+        }
+    }
+    result.push_str(")");
+    result
+}
+
+fn implementation_path_join(path: &Vec<String>) -> String {
+    let mut result = String::new();
+
+    if (path.len() == 1) {
+        result.push_str("implement(");
+        result.push_str(path.first().unwrap().as_str());
+    } else {
+        result.push_str("implement(");
+        for (i, app) in path.iter().enumerate() {
+            if i != path.len() {
+                result.push_str(app);
+                result.push_str(",");
+            }
+        }
+        if result.ends_with(",") {
+            result.pop();
+        }
+    }
+    result.push_str(")");
+    result
+}
+
+fn assignable_path_join(path: &Vec<String>) -> String {
+    let mut result = String::new();
+
+    if (path.len() == 1) {
+        result.push_str("canBeAssignedTo(");
+        result.push_str(path.first().unwrap().as_str());
+    } else {
+        result.push_str("canBeAssignedTo(");
+        for (i, app) in path.iter().enumerate() {
+            if i != path.len() {
+                result.push_str(app);
+                result.push_str(",");
+            }
+        }
+        if result.ends_with(",") {
+            result.pop();
+        }
+    }
+    result.push_str(")");
+    result
+}
+
+fn match_path_join(path: &Vec<String>) -> String {
+    let mut result = String::new();
+
+    if (path.len() == 1) {
+        result.push_str("Match(");
+        result.push_str(path.first().unwrap().as_str());
+    } else {
+        result.push_str("Match(");
         for (i, app) in path.iter().enumerate() {
             if i != path.len() {
                 result.push_str(app);
@@ -386,12 +503,12 @@ fn vec_operator_to_string(ops: &Vec<Operator>, assert: &RuleAssert) -> String {
                     index += 1;
                     if let Some(next_op) = iter.next() {
                         match next_op {
-                            Operator::AccessBy => "notBeAccessedBy",
+                            Operator::beAccessedBy => "notBeAccessedBy",
                             Operator::DependBy => "notBeDependBy",
                             Operator::Extend => "notExtend",
                             Operator::ExtendBy => "notBeExtendedBy",
                             Operator::Implement => "notImplement",
-                            Operator::FreeOfCircle => "notFreeOfCircle",
+                            Operator::FreeOfCircular => "notFreeOfCircular",
                             Operator::Embed => "notEmbed",
                             Operator::Rewrite => "notRewrite",
                             Operator::Inherit => "notInherit",
@@ -416,12 +533,12 @@ fn vec_operator_to_string(ops: &Vec<Operator>, assert: &RuleAssert) -> String {
                         panic!("Invalid operator sequence: 'Not' must be followed by another operator");
                     }
                 }
-                Operator::AccessBy => "BeAccessedBy",
+                Operator::beAccessedBy => "BeAccessedBy",
                 Operator::DependBy => "BeDependedBy",
                 Operator::Extend => "Extend",
                 Operator::ExtendBy => "BeExtendedBy",
                 Operator::Implement => "Implement",
-                Operator::FreeOfCircle => "FreeOfCircle",
+                Operator::FreeOfCircular => "FreeOfCircular",
                 Operator::Embed => "Embed",
                 Operator::Rewrite => "Rewrite",
                 Operator::Inherit => "Inherit",

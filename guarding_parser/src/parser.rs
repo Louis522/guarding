@@ -197,12 +197,12 @@ fn parse_operator(parent: Pair<Rule>) -> Vec<Operator> {
 
         Rule::op_inside => { Operator::Inside }
         Rule::op_resideIn => { Operator::ResideIn }
-        Rule::op_accessBy => { Operator::AccessBy }
+        Rule::op_accessBy => { Operator::beAccessedBy }
         Rule::op_dependBy => { Operator::DependBy }
         Rule::op_extend => { Operator::Extend }
         //Rule::op_extendBy => { Operator::ExtendBy }
         Rule::op_implement => { Operator::Implement }
-        Rule::op_freeOfCircle => { Operator::FreeOfCircle }
+        Rule::op_freeOfCircular => { Operator::FreeOfCircular }
         Rule::op_embed => { Operator::Embed }
         Rule::op_rewrite => { Operator::Rewrite }
         Rule::op_inherit => { Operator::Inherit }
@@ -343,7 +343,7 @@ fn parse_scope(parent: Pair<Rule>) -> RuleScope {
             let string = str_support::unescape(without_markers.as_str()).expect("incorrect string literal");
             RuleScope::PathDefine(string)
         }
-        /*Rule::assignable_scope => {
+        Rule::assignable_scope => {
             let string = string_from_pair(pair);
             RuleScope::Assignable(string)
         }
@@ -358,7 +358,7 @@ fn parse_scope(parent: Pair<Rule>) -> RuleScope {
         Rule::impl_scope => {
             let string = string_from_pair(pair);
             RuleScope::Implementation(string)
-        }*/
+        }
         Rule::actively_native_scope => {
             let string = string_from_pair(pair);
             RuleScope::ActivelyNative(string)

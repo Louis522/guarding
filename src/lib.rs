@@ -5,6 +5,7 @@ use std::io::{prelude, Seek, Write};
 use serde_json::{json, Value};
 use std::fs::{File, self, OpenOptions};
 use guarding_core::domain::code_file::CodeFile;
+use colored::*;
 use guarding_ident::ModelBuilder;
 use guarding_core::rule_executor::{RuleErrorMsg, RuleExecutor};
 use guarding_parser::ast::GuardRule;
@@ -27,8 +28,8 @@ pub fn exec_guarding(rule_content: String, code_dir: PathBuf, output: PathBuf, i
             for rule in rules {
                 result_string.push(rule.to_string());
             }
-            println!("DSL: {:?}", rule_content.as_str());
-            println!("API: {:?}", result_string);
+            println!("{} {:?}","DSL:".bright_green(), rule_content.as_str());
+            println!("{} {:?}","API:".bright_green(), result_string);
             //result String写到json文件里
             let json_value = json!({"DSL": rule_content.as_str(),"result": result_string });
             let json_string = serde_json::to_string_pretty(&json_value).unwrap();
